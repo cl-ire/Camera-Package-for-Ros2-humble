@@ -3,9 +3,12 @@
 <package format="3">
   <name>camera_package</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="ubuntu@todo.todo">ubuntu</maintainer>
+  <description>Camera Subscriber for the topic /image_raw form the v4l2_camera_node </description>
+  <maintainer email="ubuntu@todo.todo">Claire Schubert</maintainer>
   <license>TODO: License declaration</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
