@@ -13,13 +13,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ubuntu',
+    maintainer='Claire Schubert',
     maintainer_email='ubuntu@todo.todo',
-    description='TODO: Package description',
+    description='Camera Subscriber for the topic /image_raw form the v4l2_camera_node',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'camera_subscriber_node = camera_package.camera_subscriber:main',
         ],
     },
 )
