@@ -16,7 +16,7 @@ class CameraSubscriber(Node):
         self.subscription  # prevent unused variable warning
         self.bridge = CvBridge()
 
-    def listener_callback(self, msg):
+    def listener_callback(self, data):
         self.get_logger().info('Image recived')
         
         try:
@@ -24,7 +24,7 @@ class CameraSubscriber(Node):
         except CvBridgeError as e:
             print(e)
         
-        cv2.imwrite("~/ros2_ws/src/cammera_package/image.jpg", cv_image)
+        cv2.imwrite("/home/ubuntu/image/image.jpg", cv_image)
 
         #function(cv_image)         hier würde dann die funktion aufgerufen werden retun wäre dann die Koordinaten 
     
