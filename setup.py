@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'camera_s = camera_package.camera_subscriber_node:main',
+            'camera_test = camera_package.camera_subscriber_test:main',
+            'camera_opencv = camera_package.camera_opencv_node:main',
         ],
     },
 )

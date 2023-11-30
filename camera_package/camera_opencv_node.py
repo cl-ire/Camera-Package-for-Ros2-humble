@@ -1,14 +1,13 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-from std_msgs.msg import String
+from std_msgs.msg import String, Int32MultiArray
 from cv_bridge import CvBridge
 import cv2
 
-from detect_person import DetectPerson      #imports our detect person function
 
 class CameraOpencv(Node):
-    def __init__(self, opencv_function):
+    def __init__(self):
         super().__init__('camera_subscriber')
         #create the subscriber 
         self.subscription = self.create_subscription(
@@ -17,13 +16,11 @@ class CameraOpencv(Node):
             self.listener_callback,     #function to notify that a mesage was recived
             5)                          #queue size amount of the stored mesages  
         self.subscription  # prevent unused variable warning
-        self.publisher_ = self.create_publisher(String, 'topic', 1)
+        self.publisher_ = self.create_publisher(Int32MultiArray, '/position_data', 1)
         self.bridge = CvBridge()
 
-        self.opencv_function = opencv_function
-
     def listener_callback(self, Image):
-        position_data = String()
+        position_data = Int32MultiArray()
         
         self.get_logger().info('Image recived')      #consoll output to confirm that a mesage was recived 
         
@@ -32,24 +29,21 @@ class CameraOpencv(Node):
         except CvBridgeError as e:
             print(e)
         
-        Position = self.opencv_function.getPosition()
-
-        position_data.data = str(Position[1]) + ''
-
-
-
         
-    
-   
+        #opencv code
+
+
+        Position = [1,2,3] #output variable
+        position_data.data = Position
+
+
 
 
 def main(args=None):
     
-    temp = 0,7      #später funktion die den faktor berechnet 
-    opencv_function = DetectPerson(temp)
 
     rclpy.init(args=args)
-    camera_subscriber = CameraOpencv(opencv_function)
+    camera_subscriber = CameraOpencv()
     rclpy.spin(camera_subscriber)    
 
     # Destroy the node explicitly
