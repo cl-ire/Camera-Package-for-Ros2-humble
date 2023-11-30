@@ -16,15 +16,15 @@ class CameraSubscriber(Node):
         self.subscription  # prevent unused variable warning
         self.bridge = CvBridge()
 
-    def listener_callback(self, data):
-        self.get_logger().info('Image recived')      #consoll output to confirm that a mesage was recived 
+    def listener_callback(self, msg):
+        self.get_logger().info('Image recived')
         
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")      #converts the ros image topic into the opencv image format
         except CvBridgeError as e:
             print(e)
         
-        cv2.imwrite("~/ros2_ws/src/cammera_package/image.jpg", cv_image)    #saves the image in the image folder
+        cv2.imwrite("~/ros2_ws/src/cammera_package/image.jpg", cv_image)
 
         #function(cv_image)         hier würde dann die funktion aufgerufen werden retun wäre dann die Koordinaten 
     
