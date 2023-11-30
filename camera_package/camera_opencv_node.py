@@ -36,6 +36,8 @@ class CameraOpencv(Node):
         Position = [1,2,3] #output variable
         position_data.data = Position
 
+        self.publisher_.publish(position_data)
+
 
 
 
