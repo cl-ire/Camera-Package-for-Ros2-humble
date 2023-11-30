@@ -1,11 +1,14 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
+from std_msgs.msg import String
 from cv_bridge import CvBridge
 import cv2
 
-class CameraSubscriber(Node):
-    def __init__(self):
+from detect_person import DetectPerson      #imports our detect person function
+
+class CameraOpencv(Node):
+    def __init__(self, opencv_function):
         super().__init__('camera_subscriber')
         #create the subscriber 
         self.subscription = self.create_subscription(
@@ -14,34 +17,40 @@ class CameraSubscriber(Node):
             self.listener_callback,     #function to notify that a mesage was recived
             5)                          #queue size amount of the stored mesages  
         self.subscription  # prevent unused variable warning
+        self.publisher_ = self.create_publisher(String, 'topic', 1)
         self.bridge = CvBridge()
 
-    def listener_callback(self, data):
+        self.opencv_function = opencv_function
+
+    def listener_callback(self, Image):
+        position_data = String()
+        
         self.get_logger().info('Image recived')      #consoll output to confirm that a mesage was recived 
         
         try:
-            cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")      #converts the ros image topic into the opencv image format
+            cv_image = self.bridge.imgmsg_to_cv2(Image, "bgr8")      #converts the ros image topic into the opencv image format
         except CvBridgeError as e:
             print(e)
         
-        cv2.imwrite("~/ros2_ws/src/cammera_package/image.jpg", cv_image)    #saves the image in the image folder
+        Position = self.opencv_function.getPosition()
 
-        #function(cv_image)         hier würde dann die funktion aufgerufen werden retun wäre dann die Koordinaten 
+        position_data.data = str(Position[1]) + ''
+
+
+
+        
     
    
 
 
 def main(args=None):
     
-    #setup für die berechnung
+    temp = 0,7      #später funktion die den faktor berechnet 
+    opencv_function = DetectPerson(temp)
 
     rclpy.init(args=args)
-
-    camera_subscriber = CameraSubscriber()
-
-    rclpy.spin(camera_subscriber)
-
-    
+    camera_subscriber = CameraOpencv(opencv_function)
+    rclpy.spin(camera_subscriber)    
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
