@@ -29,6 +29,7 @@ class CameraOpencv(Node):
         except CvBridgeError as e:
             print(e)
         
+        self.distance = self.get_parameter('pan_offset').get_parameter_value().double_value
         
         #opencv code
 
