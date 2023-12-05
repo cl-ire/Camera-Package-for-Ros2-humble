@@ -19,6 +19,8 @@ class CameraOpencv(Node):
         self.publisher_ = self.create_publisher(Int32MultiArray, '/position_data', 1)
         self.bridge = CvBridge()
 
+        self.distance = self.get_parameter('distance').get_parameter_value().double_value
+
     def listener_callback(self, Image):
         position_data = Int32MultiArray()
         
@@ -29,12 +31,12 @@ class CameraOpencv(Node):
         except CvBridgeError as e:
             print(e)
         
-        self.distance = self.get_parameter('distance').get_parameter_value().double_value
+        
         
         #opencv code
 
 
-        Position = [1,2,3] #output variable
+        Position = [1,2,3,3] #output variable
         position_data.data = Position
 
         self.publisher_.publish(position_data)

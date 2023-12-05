@@ -3,7 +3,6 @@ from launch_ros.actions import Node
 from launch.actions import LogInfo
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from pathlib import Path
 
 def generate_launch_description():
     return LaunchDescription([
@@ -12,12 +11,22 @@ def generate_launch_description():
             msg="Launching CameraOpencv node..."
         ),
         Node(
-            package='camera_package',  # Replace with the actual package name
-            executable='camera_opencv',  # Replace with the actual executable name
-            name='camera_opencv_node',
+            package='camera_package',
+            executable='camera_opencv',
+            name='camera_opencv',
             output='screen',
             parameters=[
                 {'distance': 0.0},
+            ],
+        ),
+        Node(
+            package='camera_package',
+            executable='movement_control',
+            name='movement_control',
+            output='screen',
+            parameters=[
+                {'pan_factor': 0.0},
+                {'tilt_factor': 0.0},
             ],
         ),
 
