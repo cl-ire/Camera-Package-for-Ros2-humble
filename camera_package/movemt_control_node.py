@@ -2,42 +2,42 @@ import rclpy
 from rclpy.node import Node
 import time
 from sensor_msgs.msg import Image
-from std_msgs.msg import String, Int32MultiArray, Float32
+from std_msgs.msg import String, Int32MultiArray
 from geometry_msgs.msg import Twist
 
-from ros2_for_waveshare_alphabot2.msg import PanTilt, IR, RGBLED
 
 
 class MovementControl(Node):
     def __init__(self):
         super().__init__('movement_control')
-        #create the subscriber 
+        
+        #Folow me 
         self.subscription = self.create_subscription(
             Int32MultiArray,            #data type
             '/position_data',           #topic published by camera_opencv_node
             self.listener_callback,     #function to notify that a mesage was recived
             5)                          #queue size amount of the stored mesages  
         self.subscription
-
-        # Message publishers
-        self.pantilt_pub = self.create_publisher(PanTilt, 'pan_tilt', 4)
-        self.rgb_pub = self.create_publisher(RGBLED, 'rgb_leds', 4)
-        self.buzz_pub = self.create_publisher(Float32, 'buzzer', 4)
-        self.move_pub = self.create_publisher(Twist, 'cmd_vel', 4)
-
-        # variables
         self.Position = []
 
-        # parameter
-        self.pan_factor = self.get_parameter_or('pan_factor', 1)
-        self.tilt_factor = self.get_parameter_or('tilt_factor', 1)
+        #Joistick
+        self.subscription = self.create_subscription(
+            String,                     #data type
+            'joystick',                 #topic published by camera_opencv_node
+            self.control,               #function to notify that a mesage was recived
+            5)                          #queue size amount of the stored mesages  
+        self.subscription
 
+        # Servo
+        self.servo_msg_hold = [0, 0]
+        self.servo_pub = self.create_publisher(Int32MultiArray, '/Servo', 4)
+        
 
     def listener_callback(self, msg):
-        # Messages
-        pantilt_msg = PanTilt()
-        rgb_led_msg = RGBLED()        
         
+        # channel 0 = pan 
+		# channel 1 = tilt
+
         self.get_logger().info('Position recived')      #consoll output to confirm that a mesage was recived 
         self.Position.append(msg.data)         #save recived msg in a array
 
@@ -47,31 +47,42 @@ class MovementControl(Node):
         self.lenght_y     = self.Position[4]
         self.max_x        = self.Position[5]
         self.max_y        = self.Position[6]
+        self.max_winkel_x = 66
+        self.max_winkel_y = 48
         
-        self.calculate()
+        # Winkelberechnung
+        self.winkel_x = int((self.center_x/self.max_x)*self.max_winkel_x)
+        self.winkel_y = int((self.center_y/self.max_y)*self.max_winkel_y)
+        
+        self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
+        self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
 
-        pantilt_msg.pan = self.percetage_x
-        pantilt_msg.tilt = self.percetage_y
-        self.pantilt_pub.publish(pantilt_msg)
+        servo_msg_sent = Int32MultiArray()
+        
+        self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
+        servo_msg_sent.data = self.servo_msg_hold
+        self.servo_pub.publish(servo_msg_sent)
+        
+
         time.sleep(0.2)
 
+    def control(self, msg):
+        #Joistick
+        imput = msg.data
+        self.get_logger().info("Joistick Imput recived: {}".format(imput)) 
+        
+                
+        # if imput == "Center":
+        #     #
+        # elif imput == "Up":
+        #     #
+        # elif imput == "Right":
+        #     #
+        # elif imput == "Left":
+        #     #
+        # elif imput == "Down":
+        #     #
 
-
-    def calculate(self):
-        self.center_x = (self.coordinate_x - (self.lenght_x/2))
-        self.center_y = (self.coordinate_y - (self.lenght_y/2))
-
-        if (self.max_x > self.max_y):
-            max = self.max_x
-        else:
-            max = self.max_y
-
-        self.percetage_x = ((self.center_x/max)*self.pan_factor)
-        self.percetage_y = ((self.center_y/max)*self.tilt_factor)
-
-
-
-    
 
 
 def main(args=None):

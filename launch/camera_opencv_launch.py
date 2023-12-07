@@ -1,8 +1,8 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import LogInfo
-from launch.actions import IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+# from launch.actions import IncludeLaunchDescription
+# from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
     return LaunchDescription([
@@ -30,7 +30,4 @@ def generate_launch_description():
             ],
         ),
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([Ros2_for_Waveshare_Alphabot2, 'Alphabot2_standard_launch.py']),
-        ),
     ])

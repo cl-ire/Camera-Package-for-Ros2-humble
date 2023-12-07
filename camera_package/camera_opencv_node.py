@@ -19,7 +19,8 @@ class CameraOpencv(Node):
         self.publisher_ = self.create_publisher(Int32MultiArray, '/position_data', 1)
         self.bridge = CvBridge()
 
-        self.distance = self.get_parameter('distance').get_parameter_value().double_value
+        # create Human detection object
+
 
     def listener_callback(self, Image):
         position_data = Int32MultiArray()
@@ -31,8 +32,7 @@ class CameraOpencv(Node):
         except CvBridgeError as e:
             print(e)
         
-        
-        
+                
         #opencv code
 
 
@@ -40,7 +40,6 @@ class CameraOpencv(Node):
         position_data.data = Position
 
         self.publisher_.publish(position_data)
-
 
 
 
