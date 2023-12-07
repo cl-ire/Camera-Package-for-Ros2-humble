@@ -5,7 +5,7 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import String, Int32MultiArray
 from geometry_msgs.msg import Twist
 
-
+import math
 
 class MovementControl(Node):
     def __init__(self):
@@ -23,14 +23,14 @@ class MovementControl(Node):
         #Joistick
         self.subscription = self.create_subscription(
             String,                     #data type
-            'joystick',                 #topic published by camera_opencv_node
+            '/joystick',                 #topic published by camera_opencv_node
             self.control,               #function to notify that a mesage was recived
             5)                          #queue size amount of the stored mesages  
         self.subscription
 
         # Servo
         self.servo_msg_hold = [0, 0]
-        self.servo_pub = self.create_publisher(Int32MultiArray, '/Servo', 4)
+        self.servo_pub = self.create_publisher(Int32MultiArray, '/servo', 4)
         
 
     def listener_callback(self, msg):
@@ -62,6 +62,8 @@ class MovementControl(Node):
         self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
         servo_msg_sent.data = self.servo_msg_hold
         self.servo_pub.publish(servo_msg_sent)
+
+        # self.determine_percentage_of_height(200, 180, 48)
         
 
         time.sleep(0.2)
@@ -82,6 +84,21 @@ class MovementControl(Node):
         #     #
         # elif imput == "Down":
         #     #
+
+    
+
+    # def determine_percentage_of_height(wanted_distance, height, angle):
+    #     a = wanted_distance
+    #     angle_rad = math.radians(angle)
+    #     #print(wanted_distance, height, angle, angle_rad)
+
+    #     b = round(a * math.tan(angle_rad))
+    #     #print(b)
+
+
+    #     required_percentage = round((height/b) * 100)
+
+    #     return required_percentage
 
 
 
