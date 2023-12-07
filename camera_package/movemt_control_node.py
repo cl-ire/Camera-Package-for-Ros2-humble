@@ -23,14 +23,14 @@ class MovementControl(Node):
         #Joistick
         self.subscription = self.create_subscription(
             String,                     #data type
-            'joystick',                 #topic published by camera_opencv_node
+            '/joystick',                 #topic published by camera_opencv_node
             self.control,               #function to notify that a mesage was recived
             5)                          #queue size amount of the stored mesages  
         self.subscription
 
         # Servo
         self.servo_msg_hold = [0, 0]
-        self.servo_pub = self.create_publisher(Int32MultiArray, '/Servo', 4)
+        self.servo_pub = self.create_publisher(Int32MultiArray, '/servo', 4)
         
 
     def listener_callback(self, msg):
