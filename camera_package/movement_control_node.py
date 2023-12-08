@@ -11,8 +11,8 @@ class MovementControl(Node):
         
         # parameters
         # camera angle
-        self.max_winkel_x = 66
-        self.max_winkel_y = 48
+        self.max_winkel_x = 66 + 4
+        self.max_winkel_y = 48 + 2
         # distance aproximation setings
         self.distance_to_person = 200
         self.hight_of_person = 170
@@ -68,7 +68,7 @@ class MovementControl(Node):
         servo_msg_sent = Int32MultiArray()
         
         if self.enable_movement :
-            self.get_logger().info("Data sent to Servo: [{}, {}]".format(self.winkel_x, self.winkel_y))
+            self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
             self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
             servo_msg_sent.data = self.servo_msg_hold
             self.servo_pub.publish(servo_msg_sent)

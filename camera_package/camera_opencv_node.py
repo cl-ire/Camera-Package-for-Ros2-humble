@@ -54,7 +54,7 @@ class CameraOpencv(Node):
             Position = [0,0,100,800,1280,960] #output variable
             self.x = 1
         
-        time.sleep(0.2)
+        time.sleep(1)
 
         position_data.data = Position
 
