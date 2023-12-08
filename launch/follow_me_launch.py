@@ -1,15 +1,11 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import LogInfo
 # from launch.actions import IncludeLaunchDescription
 # from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
     return LaunchDescription([
-        LogInfo(
-            action=LogInfo.LogInfo.DEFAULT,
-            msg="Launching CameraOpencv node..."
-        ),
+        
         Node(
             package='camera_package',
             executable='camera_opencv',
