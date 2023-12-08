@@ -43,20 +43,20 @@ class MovementControl(Node):
         self.servo_pub = self.create_publisher(Int32MultiArray, '/servo', 4)
                 
 
-    def listener_callback(self, msg):
+    def listener_callback(self, Position):
         
         # channel 0 = pan 
 		# channel 1 = tilt
 
         self.get_logger().info('Position recived')      #consoll output to confirm that a mesage was recived 
-        self.Position.append(msg.data)         #save recived msg in a array
+        # self.Position.append(msg.data)         #save recived msg in a array
 
-        self.coordinate_x = self.Position[1]
-        self.coordinate_y = self.Position[2]
-        self.lenght_x     = self.Position[3]
-        self.lenght_y     = self.Position[4]
-        self.max_x        = self.Position[5]
-        self.max_y        = self.Position[6]
+        self.coordinate_x = self.Position.data[1]
+        self.coordinate_y = self.Position.data[2]
+        self.lenght_x     = self.Position.data[3]
+        self.lenght_y     = self.Position.data[4]
+        self.max_x        = self.Position.data[5]
+        self.max_y        = self.Position.data[6]
                 
         # Winkelberechnung
         self.winkel_x = int((self.coordinate_x/self.max_x)*self.max_winkel_x)
