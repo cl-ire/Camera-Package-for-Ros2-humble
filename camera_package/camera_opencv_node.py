@@ -39,16 +39,16 @@ class CameraOpencv(Node):
         # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
         
         if self.x == 0:
-            Position = [50,50,100,800,1280,960] #output variable
+            Position = [128,0,100,800,1280,960] #output variable
             self.x = 1
         elif self.x == 1:
-            Position = [-50,-50,100,800,1280,960] #output variable
+            Position = [0,48,100,800,1280,960] #output variable
             self.x = 2
         elif self.x == 2:
-            Position = [-50,-50,100,800,1280,960] #output variable
+            Position = [-128,0,100,800,1280,960] #output variable
             self.x = 3
         elif self.x == 3:
-            Position = [50,50,100,800,1280,960] #output variable
+            Position = [0,-48,100,800,1280,960] #output variable
             self.x = 4
         elif self.x == 4:
             Position = [0,0,100,800,1280,960] #output variable

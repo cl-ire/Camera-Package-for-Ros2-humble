@@ -68,6 +68,7 @@ class MovementControl(Node):
         servo_msg_sent = Int32MultiArray()
         
         if self.enable_movement :
+            self.get_logger().info("Data sent to Servo: [{}, {}]".format(self.winkel_x, self.winkel_y))
             self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
             servo_msg_sent.data = self.servo_msg_hold
             self.servo_pub.publish(servo_msg_sent)
