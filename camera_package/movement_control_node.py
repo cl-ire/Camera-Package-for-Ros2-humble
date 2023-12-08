@@ -51,12 +51,12 @@ class MovementControl(Node):
         self.get_logger().info('Position recived')      #consoll output to confirm that a mesage was recived 
         # self.Position.append(msg.data)         #save recived msg in a array
 
-        self.coordinate_x = self.Position.data[1]
-        self.coordinate_y = self.Position.data[2]
-        self.lenght_x     = self.Position.data[3]
-        self.lenght_y     = self.Position.data[4]
-        self.max_x        = self.Position.data[5]
-        self.max_y        = self.Position.data[6]
+        self.coordinate_x = Position.data[1]
+        self.coordinate_y = Position.data[2]
+        self.lenght_x     = Position.data[3]
+        self.lenght_y     = Position.data[4]
+        self.max_x        = Position.data[5]
+        self.max_y        = Position.data[6]
                 
         # Winkelberechnung
         self.winkel_x = int((self.coordinate_x/self.max_x)*self.max_winkel_x)
