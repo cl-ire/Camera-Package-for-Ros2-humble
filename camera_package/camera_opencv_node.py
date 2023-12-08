@@ -4,6 +4,10 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import String, Int32MultiArray
 from cv_bridge import CvBridge
 import cv2
+import time
+from human_detector import human_detector
+
+import os
 
 
 class CameraOpencv(Node):
@@ -17,29 +21,69 @@ class CameraOpencv(Node):
             5)                          #queue size amount of the stored mesages  
         self.subscription  # prevent unused variable warning
         self.publisher_ = self.create_publisher(Int32MultiArray, '/position_data', 1)
+        self.image_publisher = self.create_publisher(Image, '/opencv_image', 1)
         self.bridge = CvBridge()
 
-        # create Human detection object
+        self.x = 1
+
+        # self.get_logger().info(f"OpenCV Version: {cv2.__version__}")
+        # self.get_logger().info(f"Available Attributes: {dir(cv2)}")
+
+        # path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test.jpg')
+        # self.frame = cv2.imread(path)
+        # self.get_logger().info('read image {}'.format(self.frame.shape))
+        self.detector = human_detector.HumanDetector()
 
 
-    def listener_callback(self, Image):
-        position_data = Int32MultiArray()
-        
+    def listener_callback(self, msg):
+                
         self.get_logger().info('Image recived')      #consoll output to confirm that a mesage was recived 
         
         try:
-            cv_image = self.bridge.imgmsg_to_cv2(Image, "bgr8")      #converts the ros image topic into the opencv image format
+            cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")      #converts the ros image topic into the opencv image format
         except CvBridgeError as e:
             print(e)
-        
                 
-        #opencv code
 
+        try:
+            # Position = self.detector.locate_person(self.frame)
+            value = self.detector.locate_person(cv_image)
+            Position, Image_msg = value
 
-        Position = [1,2,3,3] #output variable
-        position_data.data = Position
+            ros_image_msg = self.bridge.cv2_to_imgmsg(Image_msg, "bgr8")
+            self.image_publisher.publish(ros_image_msg)
 
-        self.publisher_.publish(position_data)
+        except:
+            self.get_logger().info('no Position data recived')
+
+        if Position != []:
+            self.get_logger().info('Position data recived {}'.format(Position))
+            position_data = Int32MultiArray()
+            position_data.data = Position
+            self.publisher_.publish(position_data)
+            
+                
+
+        # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
+            
+            # test code
+            # if self.x == 0:
+            #     Position = [300,0,100,800,1280,960] #output variable
+            #     self.x = 1
+            # elif self.x == 1:
+            #     Position = [0,150,100,800,1280,960] #output variable
+            #     self.x = 2
+            # elif self.x == 2:
+            #     Position = [-300,0,100,800,1280,960] #output variable
+            #     self.x = 3
+            # elif self.x == 3:
+            #     Position = [0,-150,100,800,1280,960] #output variable
+            #     self.x = 4
+            # elif self.x == 4:
+            #     Position = [0,0,100,800,1280,960] #output variable
+            #     self.x = 0
+
+        time.sleep(0.2)
 
 
 
