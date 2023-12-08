@@ -45,10 +45,10 @@ class CameraOpencv(Node):
             Position = [-50,-50,100,800,1280,960] #output variable
             self.x = 2
         elif self.x == 2:
-            Position = [-100,-100,100,800,1280,960] #output variable
+            Position = [-50,-50,100,800,1280,960] #output variable
             self.x = 3
         elif self.x == 3:
-            Position = [-50,-50,100,800,1280,960] #output variable
+            Position = [50,50,100,800,1280,960] #output variable
             self.x = 4
         elif self.x == 4:
             Position = [0,0,100,800,1280,960] #output variable
