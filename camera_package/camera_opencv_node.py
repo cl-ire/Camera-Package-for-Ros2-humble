@@ -52,7 +52,7 @@ class CameraOpencv(Node):
             self.x = 4
         elif self.x == 4:
             Position = [0,0,100,800,1280,960] #output variable
-            self.x = 1
+            self.x = 0
         
         time.sleep(1)
 
