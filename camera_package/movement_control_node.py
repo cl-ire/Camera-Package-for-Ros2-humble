@@ -72,8 +72,11 @@ class MovementControl(Node):
             servo_msg_sent.data = self.servo_msg_hold
             self.servo_pub.publish(servo_msg_sent)
 
-        distance = self.aproximate_distance()
-        self.get_logger().info("Distance to person : {}".format(distance))
+        try:
+            distance = self.aproximate_distance()
+            self.get_logger().info("Distance to person : {}".format(distance))
+        except:
+            self.get_logger().info("unable to calculate Distance")
 
         time.sleep(0.2)
 
