@@ -101,7 +101,7 @@ class HumanDetector():
 
         ret, buffer = cv2.imencode('.jpg', frame)
         ret_frame = buffer.tobytes()
-        return (b'--frame\r\n'
+        yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + ret_frame + b'\r\n')
         
 
