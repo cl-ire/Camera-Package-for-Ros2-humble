@@ -212,7 +212,7 @@ class CameraOpencv(Node):
         try:
             Position = self.detector.locate_person(cv_image)
             self.get_logger().info('Position data recived')
-        except
+        except:
             self.get_logger().info('no Position data recived')
 
         #opencv code
