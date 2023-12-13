@@ -5,9 +5,9 @@ class HumanDetector():
         # Initialize the HumanDetector class with necessary attributes
         self.name = "HumanDetector"
 
-        xml_path = os.path.join(os.path.dirname(os.path.abspath(file)), 'haarcascade_frontalface_default.xml')
+        xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'haarcascade_frontalface_default.xml')
         self.full_body_cascade = cv2.CascadeClassifier(xml_path)
-        
+
         self.bbox_person = None
         self.frame_counter = 0
         self.show_frame = show_frame
