@@ -21,6 +21,7 @@ class CameraOpencv(Node):
             1)                          #queue size amount of the stored mesages  
         self.subscription  # prevent unused variable warning
         self.publisher_ = self.create_publisher(Int32MultiArray, '/position_data', 1)
+        self.image_publisher = self.create_publisher(Image, '/opencv_image', 1)
         self.bridge = CvBridge()
 
         self.x = 1
@@ -46,7 +47,9 @@ class CameraOpencv(Node):
 
         try:
             # Position = self.detector.locate_person(self.frame)
-            Position = self.detector.locate_person(cv_image)
+            value = self.detector.locate_person(cv_image)
+            Position, Image_msg = value
+
         except:
             self.get_logger().info('no Position data recived')
 
@@ -55,6 +58,7 @@ class CameraOpencv(Node):
             position_data = Int32MultiArray()
             position_data.data = Position
             self.publisher_.publish(position_data)
+            self.image_publisher.publish(Image_msg)
         
 
         # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]

@@ -17,7 +17,7 @@ class HumanDetector():
         values = []
 
         # Process the frame to detect and track humans
-        self.process_frame(frame)
+        image = self.process_frame(frame)
 
         # If a person is being tracked, gather information
         if self.bbox_person is not None:
@@ -38,7 +38,7 @@ class HumanDetector():
             values.append(int(frame_height))
             values.append(self.count)
 
-        return values
+        return values, image
 
     def process_frame(self, frame):
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

@@ -1,144 +1,96 @@
 import cv2
 import os
-from flask import Flask, render_template, Response
-
-
 class HumanDetector():
-    def __init__(self):
+    def __init__(self, show_frame=False):
         # Initialize the HumanDetector class with necessary attributes
         self.name = "HumanDetector"
 
-        xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'haarcascade_fullbody.xml')
-
+        xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'haarcascade_frontalface_default.xml')
         self.full_body_cascade = cv2.CascadeClassifier(xml_path)
-        self.tracker = None
-        self.tracker_bbox = None
-        self.selected_human = None
+
+        self.bbox_person = None
         self.frame_counter = 0
-
-        # video stream
-        app = Flask(__name__)
-
-        @app.route('/video_feed')
-        def video_feed():
-            #Video streaming route. Put this in the src attribute of an img tag
-            return Response(self.process_frame(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-        @app.route('/')
-        def index():
-            """Video streaming home page."""
-            return render_template('index.html')
-
-        app.run(host='0.0.0.0', debug=True)
+        self.show_frame = show_frame
+        self.count = 0
 
     def locate_person(self, frame):
-        # Locate a person in the frame and retrieve relevant information
         values = []
 
         # Process the frame to detect and track humans
         self.process_frame(frame)
 
         # If a person is being tracked, gather information
-        if self.tracker_bbox is not None:
-            bbox = self.tracker_bbox
+        if self.bbox_person is not None:
             frame_height, frame_width, _ = frame.shape
-            # cv_center_of_person = (bbox[0] + bbox[2] // 2, bbox[1] + bbox[3] // 2)
             custom_x, custom_y = self.cv_to_custom_coordinates(
-                x_cv=bbox[0], y_cv=bbox[1], frame_width=frame_width, frame_height=frame_height)
+                x_cv=self.bbox_person[0], y_cv=self.bbox_person[1], frame_width=frame_width, frame_height=frame_height)
             custom_center_of_person = self.cv_to_custom_coordinates(
-                x_cv=bbox[0] + bbox[2] // 2, y_cv=bbox[1] + bbox[3] // 2, frame_width=frame_width, frame_height=frame_height)
-            percentage_of_frame_height = self.get_percentage_of_height(
-                bbox, frame_height)
+                x_cv=self.bbox_person[0] + self.bbox_person[2] // 2, y_cv=self.bbox_person[1] + self.bbox_person[3] // 2
+                , frame_width=frame_width, frame_height=frame_height)
 
             # custom_x center of person
-            values.append(custom_center_of_person[0])
+            values.append(int(custom_center_of_person[0]))
             # custom_y center of person
-            values.append(custom_center_of_person[1])
-            values.append(bbox[2])  # width of person
-            values.append(bbox[3])  # height of person
-            # values.append(percentage_of_frame_height)
-            values.append(frame_width)
-            values.append(frame_height)
+            values.append(int(custom_center_of_person[1]))
+            values.append(int(self.bbox_person[2]))  # width of person
+            values.append(int(self.bbox_person[3]))  # height of person
+            values.append(int(frame_width))
+            values.append(int(frame_height))
+            values.append(self.count)
 
         return values
 
     def process_frame(self, frame):
-        # Process each frame to detect and track humans
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         humans = self.full_body_cascade.detectMultiScale(
             gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
         # Select a human to track every 5 frames
-        if self.frame_counter % 5 == 0:
-            # sets self.selected_human and self.tracker
-            self.select_human(frame, humans)
+        self.select_human(humans)
 
-        # Update the tracker and visualize the bounding box
-        if self.tracker is not None:
-            success, bbox = self.tracker.update(frame)
-            self.tracker_bbox = bbox
-
-            if success:
-                x, y, w, h = map(int, bbox)
-                color = (0, 0, 255)
-                cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
-                cv2.putText(frame, f'({x}, {y})', (x, y - 10),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-
-        # Visualize the bounding boxes of detected humans
+        # Visualize the bounding boxes of detected faces (for testing purposes)
         for (x, y, w, h) in humans:
             color = (255, 0, 0)
             cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
 
-        # Increment the frame counter
         self.frame_counter += 1
-
-        # Display the processed frame (for testing purposes)
         frame = self.draw_coordinate_system(frame)
 
-        # cv2.imshow("Video Stream", frame)
+        if self.show_frame:
+            
+            cv2.imshow("Video Stream", frame)
 
-        ret, buffer = cv2.imencode('.jpg', frame)
-        ret_frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + ret_frame + b'\r\n')
+        path = ("/home/ubuntu/image/image" + str(self.count) + ".jpg")
+        self.count = self.count + 1
         
+        cv2.imwrite(path, frame)    #saves the image in the image folder
 
-    def select_human(self, frame, humans):
+        return frame
+
+    def select_human(self, humans):
         # Select the first detected human for tracking
         if len(humans) > 0:
             selected_human = humans[0]
             x, y, w, h = selected_human
-
-            # Initialize a MIL tracker for the selected human
-            self.tracker = cv2.TrackerMIL_create()
-            self.tracker.init(frame, (x, y, w, h))
-
+            self.bbox_person = (x, y, w, h)
         else:
-            # No human detected, reset the tracker attributes
-            # self.tracker = None
-            # self.tracker_bbox = None
-            self.selected_human = None
+            # No human detected, reset bbox
+            self.bbox_person = None
 
     def get_percentage_of_height(self, location, frame_height):
-        # Function to get the Percentage of the Person in the Picture
         if frame_height > 0:
             percentage_of_height = (location[3]/frame_height*100)
-            # Number is real Percent (*100)
             return round(percentage_of_height)
         else:
             return None
 
     def draw_coordinate_system(self, frame):
-
         height, width, _ = frame.shape
 
-        # Koordinatensystem zeichnen
         cv2.line(frame, (0, height // 2), (width, height // 2),
-                 (0, 0, 255), 2)  # Horizontale Linie (x-Achse)
+                 (0, 0, 255), 2)  # Horizontal line (x-axis)
         cv2.line(frame, (width // 2, 0), (width // 2, height),
-                 (0, 0, 255), 2)  # Vertikale Linie (y-Achse)
+                 (0, 0, 255), 2)  # Vertical line (y-axis)
 
         x = width // 2
         count = 0
@@ -148,7 +100,6 @@ class HumanDetector():
             cv2.line(frame, (x, height // 2 - 2),
                      (x, height // 2 + 2), (0, 0, 255), 2)
             if count % 100 == 0:
-                # Alle 100 Pixel (dickere Linie)
                 cv2.line(frame, (x, 0), (x, height), (255, 100, 0), 1)
                 cv2.putText(frame, str(count), (x, height // 2 + 15),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 100, 0), 2)
@@ -161,7 +112,6 @@ class HumanDetector():
             cv2.line(frame, (x, height // 2 - 2),
                      (x, height // 2 + 2), (0, 0, 255), 2)
             if count % 100 == 0:
-                # Alle 100 Pixel (dickere Linie)
                 cv2.line(frame, (x, 0), (x, height), (255, 100, 0), 1)
                 cv2.putText(frame, str(count), (x, height // 2 + 15),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 100, 0), 2)
@@ -172,9 +122,8 @@ class HumanDetector():
             y += 10
             count -= 10
             cv2.line(frame, (width // 2 - 2, y), (width // 2 + 2, y),
-                     (0, 0, 255), 2)  # Alle 10 Pixel
+                     (0, 0, 255), 2)
             if count % 100 == 0:
-                # Alle 100 Pixel (dickere Linie)
                 cv2.line(frame, (0, y), (width, y), (255, 100, 0), 1)
                 cv2.putText(frame, str(count), (width // 2 + 5, y),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 100, 0), 2)
@@ -185,9 +134,8 @@ class HumanDetector():
             y -= 10
             count += 10
             cv2.line(frame, (width // 2 - 2, y), (width // 2 + 2, y),
-                     (0, 0, 255), 2)  # Alle 10 Pixel
+                     (0, 0, 255), 2)
             if count % 100 == 0:
-                # Alle 100 Pixel (dickere Linie)
                 cv2.line(frame, (0, y), (width, y), (255, 100, 0), 1)
                 cv2.putText(frame, str(count), (width // 2 + 5, y),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 100, 0), 2)
@@ -198,3 +146,9 @@ class HumanDetector():
         x_custom = x_cv - frame_width // 2
         y_custom = frame_height // 2 - y_cv
         return x_custom, y_custom
+
+# Beispiel für die Verwendung des HumanDetector
+if __name__ == "__main__":
+    video_capture = cv2.VideoCapture(0)
+
+    detector = HumanDetector
