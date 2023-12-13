@@ -1,19 +1,18 @@
 import cv2
 import os
-
-
 class HumanDetector():
-    def __init__(self):
+    def __init__(self, show_frame=False):
         # Initialize the HumanDetector class with necessary attributes
         self.name = "HumanDetector"
-
-        # xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'haarcascade_fullbody.xml')
-        xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'haarcascade_frontalface_default.xml')
-
-        self.full_body_cascade = cv2.CascadeClassifier(xml_path)
-        self.tracker_bbox = None
+        try:
+            xml_path = os.path.join(os.path.dirname(os.path.abspath(file)), 'haarcascade_frontalface_default.xml')
+            self.full_body_cascade = cv2.CascadeClassifier(xml_path)
+        except:
+            self.full_body_cascade = cv2.CascadeClassifier(
+                cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        self.bbox_person = None
         self.frame_counter = 0
-        self.show_frame = False
+        self.show_frame = show_frame
 
     def locate_person(self, frame):
         values = []
@@ -22,22 +21,22 @@ class HumanDetector():
         self.process_frame(frame)
 
         # If a person is being tracked, gather information
-        if self.tracker_bbox is not None:
-            bbox = self.tracker_bbox
+        if self.bbox_person is not None:
             frame_height, frame_width, _ = frame.shape
             custom_x, custom_y = self.cv_to_custom_coordinates(
-                x_cv=bbox[0], y_cv=bbox[1], frame_width=frame_width, frame_height=frame_height)
+                x_cv=self.bbox_person[0], y_cv=self.bbox_person[1], frame_width=frame_width, frame_height=frame_height)
             custom_center_of_person = self.cv_to_custom_coordinates(
-                x_cv=bbox[0] + bbox[2] // 2, y_cv=bbox[1] + bbox[3] // 2, frame_width=frame_width, frame_height=frame_height)
+                x_cv=self.bbox_person[0] + self.bbox_person[2] // 2, y_cv=self.bbox_person[1] + self.bbox_person[3] // 2
+                , frame_width=frame_width, frame_height=frame_height)
 
             # custom_x center of person
-            values.append(custom_center_of_person[0])
+            values.append(int(custom_center_of_person[0]))
             # custom_y center of person
-            values.append(custom_center_of_person[1])
-            values.append(bbox[2])  # width of person
-            values.append(bbox[3])  # height of person
-            values.append(frame_width)
-            values.append(frame_height)
+            values.append(int(custom_center_of_person[1]))
+            values.append(int(self.bbox_person[2]))  # width of person
+            values.append(int(self.bbox_person[3]))  # height of person
+            values.append(int(frame_width))
+            values.append(int(frame_height))
 
         return values
 
@@ -47,9 +46,7 @@ class HumanDetector():
             gray_frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
         # Select a human to track every 5 frames
-        if self.frame_counter % 5 == 0:
-            # sets self.tracker_bbox
-            self.select_human(frame, humans)
+        self.select_human(humans)
 
         # Visualize the bounding boxes of detected faces (for testing purposes)
         for (x, y, w, h) in humans:
@@ -63,15 +60,15 @@ class HumanDetector():
 
         return frame
 
-    def select_human(self, frame, humans):
+    def select_human(self, humans):
         # Select the first detected human for tracking
         if len(humans) > 0:
             selected_human = humans[0]
             x, y, w, h = selected_human
-            self.tracker_bbox = (x, y, w, h)
+            self.bbox_person = (x, y, w, h)
         else:
-            # No human detected, reset the tracker attributes
-            self.tracker_bbox = None
+            # No human detected, reset bbox
+            self.bbox_person = None
 
     def get_percentage_of_height(self, location, frame_height):
         if frame_height > 0:
