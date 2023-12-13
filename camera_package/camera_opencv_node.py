@@ -39,7 +39,7 @@ class CameraOpencv(Node):
         except CvBridgeError as e:
             print(e)
         
-        cv_image = cv.imread('image.jpg')
+        cv_image = cv2.imread('image.jpg')
 
         try:
             Position = self.detector.locate_person(cv_image)
