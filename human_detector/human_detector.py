@@ -36,6 +36,7 @@ class HumanDetector():
             values.append(int(self.bbox_person[3]))  # height of person
             values.append(int(frame_width))
             values.append(int(frame_height))
+            values.append(self.count)
 
         return values
 
@@ -54,7 +55,7 @@ class HumanDetector():
 
         self.frame_counter += 1
         frame = self.draw_coordinate_system(frame)
-        
+
         if self.show_frame:
             
             cv2.imshow("Video Stream", frame)
