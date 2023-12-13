@@ -71,9 +71,10 @@ class CameraOpencv(Node):
             #     Position = [0,0,100,800,1280,960] #output variable
             #     self.x = 0
             
-            position_data.data = Position
-
-            self.publisher_.publish(position_data)
+            if Position != []:
+                position_data.data = Position
+                self.publisher_.publish(position_data)
+                
         except:
             self.get_logger().info('no Position data recived')
 
