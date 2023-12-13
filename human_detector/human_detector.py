@@ -13,7 +13,7 @@ class HumanDetector():
         self.full_body_cascade = cv2.CascadeClassifier(xml_path)
         self.tracker_bbox = None
         self.frame_counter = 0
-        self.show_frame = show_frame
+        self.show_frame = False
 
     def locate_person(self, frame):
         values = []
