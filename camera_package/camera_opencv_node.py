@@ -47,7 +47,8 @@ class CameraOpencv(Node):
         
 
         try:
-            Position = self.detector.locate_person(self.frame)
+            # Position = self.detector.locate_person(self.frame)
+            Position = self.detector.locate_person(cv_image)
             self.get_logger().info('Position data recived {}'.format(Position))
 
             
