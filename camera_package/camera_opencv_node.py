@@ -27,6 +27,7 @@ class CameraOpencv(Node):
         # self.get_logger().info(f"Available Attributes: {dir(cv2)}")
 
         self.frame = cv2.imread('image.jpg')
+        self.get_logger().info('read image {}'.format(self.frame.shape))
         self.detector = human_detector.HumanDetector()
 
 
