@@ -25,7 +25,7 @@ class CameraSubscriberTest(Node):
         except CvBridgeError as e:
             print(e)
 
-        path = ("/home/ubuntu/image/image" + self.count + ".jpg")
+        path = ("/home/ubuntu/image/image" + str(self.count) + ".jpg")
         self.count = self.count + 1
         
         cv2.imwrite(path, cv_image)    #saves the image in the image folder
