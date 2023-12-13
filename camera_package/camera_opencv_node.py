@@ -35,12 +35,12 @@ class CameraOpencv(Node):
         self.detector = human_detector.HumanDetector()
 
 
-    def listener_callback(self, Image):
+    def listener_callback(self, msg):
                 
         self.get_logger().info('Image recived')      #consoll output to confirm that a mesage was recived 
         
         try:
-            cv_image = self.bridge.imgmsg_to_cv2(Image, "bgr8")      #converts the ros image topic into the opencv image format
+            cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")      #converts the ros image topic into the opencv image format
         except CvBridgeError as e:
             print(e)
                 
@@ -58,7 +58,12 @@ class CameraOpencv(Node):
             position_data = Int32MultiArray()
             position_data.data = Position
             self.publisher_.publish(position_data)
-            self.image_publisher.publish(Image_msg)
+            
+            try:
+                ros_image_msg = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
+                self.image_publisher.publish(ros_image_msg)
+            except CvBridgeError as e:
+                print(e)
         
 
         # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
