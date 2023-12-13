@@ -28,8 +28,8 @@ class CameraOpencv(Node):
         # self.get_logger().info(f"OpenCV Version: {cv2.__version__}")
         # self.get_logger().info(f"Available Attributes: {dir(cv2)}")
 
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test.jpg')
-        self.frame = cv2.imread(path)
+        # path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test.jpg')
+        # self.frame = cv2.imread(path)
         # self.get_logger().info('read image {}'.format(self.frame.shape))
         self.detector = human_detector.HumanDetector()
 
@@ -48,15 +48,17 @@ class CameraOpencv(Node):
         try:
             # Position = self.detector.locate_person(self.frame)
             Position = self.detector.locate_person(cv_image)
-            
-            
-            if Position != []:
+        except:
+            self.get_logger().info('no Position data recived')
+
+        if Position != []:
                 self.get_logger().info('Position data recived {}'.format(Position))
                 position_data = Int32MultiArray()
                 position_data.data = Position
                 self.publisher_.publish(position_data)
+        
 
-            # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
+        # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
             
             # test code
             # if self.x == 0:
@@ -74,9 +76,6 @@ class CameraOpencv(Node):
             # elif self.x == 4:
             #     Position = [0,0,100,800,1280,960] #output variable
             #     self.x = 0
-        except:
-            self.get_logger().info('no Position data recived')
-
 
         time.sleep(0.2)
 
