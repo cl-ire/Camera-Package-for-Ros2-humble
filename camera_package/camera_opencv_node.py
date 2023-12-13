@@ -59,11 +59,11 @@ class CameraOpencv(Node):
             position_data.data = Position
             self.publisher_.publish(position_data)
             
-            try:
-                ros_image_msg = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
-                self.image_publisher.publish(ros_image_msg)
-            except CvBridgeError as e:
-                print(e)
+        try:
+            ros_image_msg = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
+            self.image_publisher.publish(ros_image_msg)
+        except CvBridgeError as e:
+            print(e)
         
 
         # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
