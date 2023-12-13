@@ -19,6 +19,7 @@ class MovementControl(Node):
         self.optimal_hight_percentage = self.determine_percentage_of_height()
         # default setings 
         self.enable_movement = False
+        self.use = True
 
 
         #Folow me 
@@ -68,7 +69,8 @@ class MovementControl(Node):
         self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
         
         
-        if self.enable_movement :
+        if self.enable_movement and self.use:
+            
             self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
             self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
 
@@ -76,6 +78,8 @@ class MovementControl(Node):
         
             servo_msg_sent.data = self.servo_msg_hold
             self.servo_pub.publish(servo_msg_sent)
+            
+            self.use = not self.use
 
         try:
             distance = self.aproximate_distance()
