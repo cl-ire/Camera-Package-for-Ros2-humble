@@ -30,7 +30,7 @@ class HumanDetector():
             """Video streaming home page."""
             return render_template('index.html')
 
-        app.run(debug=True)
+        app.run(host='0.0.0.0', debug=True)
 
     def locate_person(self, frame):
         # Locate a person in the frame and retrieve relevant information
