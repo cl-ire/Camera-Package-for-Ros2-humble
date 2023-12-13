@@ -27,6 +27,7 @@ setup(
             'camera_test = camera_package.camera_subscriber_test:main',
             'camera_opencv = camera_package.camera_opencv_node:main',
             'movement_control = camera_package.movement_control_node:main',
+            'image_streamer = camera_package.camera_streamer_node:main',
         ],
     },
 )

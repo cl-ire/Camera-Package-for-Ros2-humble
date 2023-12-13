@@ -8,8 +8,8 @@ def generate_launch_description():
         
         Node(
             package='camera_package',
-            executable='camera_test',
-            name='camera_test',
+            executable='image_streamer',
+            name='image_streamer',
             output='screen',
         ),
 
