@@ -7,6 +7,8 @@ import cv2
 import time
 from human_detector import human_detector
 
+import os
+
 
 class CameraOpencv(Node):
     def __init__(self):
@@ -26,7 +28,8 @@ class CameraOpencv(Node):
         # self.get_logger().info(f"OpenCV Version: {cv2.__version__}")
         # self.get_logger().info(f"Available Attributes: {dir(cv2)}")
 
-        self.frame = cv2.imread('test.jpg')
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test.jpg')
+        self.frame = cv2.imread(path)
         # self.get_logger().info('read image {}'.format(self.frame.shape))
         self.detector = human_detector.HumanDetector()
 
