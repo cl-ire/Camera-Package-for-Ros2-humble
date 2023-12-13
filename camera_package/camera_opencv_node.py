@@ -50,6 +50,9 @@ class CameraOpencv(Node):
             value = self.detector.locate_person(cv_image)
             Position, Image_msg = value
 
+            ros_image_msg = self.bridge.cv2_to_imgmsg(Image_msg, "bgr8")
+            self.image_publisher.publish(ros_image_msg)
+
         except:
             self.get_logger().info('no Position data recived')
 
@@ -59,12 +62,7 @@ class CameraOpencv(Node):
             position_data.data = Position
             self.publisher_.publish(position_data)
             
-        try:
-            ros_image_msg = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
-            self.image_publisher.publish(ros_image_msg)
-        except CvBridgeError as e:
-            print(e)
-        
+                
 
         # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
             
