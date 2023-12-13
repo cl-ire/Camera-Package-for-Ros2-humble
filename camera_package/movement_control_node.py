@@ -62,19 +62,18 @@ class MovementControl(Node):
         self.winkel_x = int((self.coordinate_x/self.max_x)*self.max_winkel_x)
         self.winkel_y = int((self.coordinate_y/self.max_y)*self.max_winkel_y)
         
-        # self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
-        # self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
-
-        self.servo_msg_hold[0] = + self.winkel_x
-        self.servo_msg_hold[1] = + self.winkel_y
 
         servo_msg_sent = Int32MultiArray()
 
         self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
-        self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
+        
         
         if self.enable_movement :
-            
+            self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
+            self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
+
+            self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
+        
             servo_msg_sent.data = self.servo_msg_hold
             self.servo_pub.publish(servo_msg_sent)
 
