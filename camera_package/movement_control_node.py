@@ -79,7 +79,7 @@ class MovementControl(Node):
                 servo_msg_sent.data = self.servo_msg_hold
                 self.servo_pub.publish(servo_msg_sent)
 
-                self.use = not self.use
+            self.use = not self.use
 
         try:
             distance = self.aproximate_distance()
