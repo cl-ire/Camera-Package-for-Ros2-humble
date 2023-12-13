@@ -69,17 +69,17 @@ class MovementControl(Node):
         self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
         
         
-        if self.enable_movement and self.use:
-            
-            self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
-            self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
+        if self.enable_movement:
+            if self.use:
+                self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
+                self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
 
-            self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
-        
-            servo_msg_sent.data = self.servo_msg_hold
-            self.servo_pub.publish(servo_msg_sent)
+                self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
             
-            self.use = not self.use
+                servo_msg_sent.data = self.servo_msg_hold
+                self.servo_pub.publish(servo_msg_sent)
+
+                self.use = not self.use
 
         try:
             distance = self.aproximate_distance()
