@@ -83,7 +83,7 @@ class MovementControl(Node):
         except:
             self.get_logger().info("unable to calculate Distance")
 
-        time.sleep(0.2)
+        time.sleep(1)
 
     def control(self, msg):
         #Joistick
