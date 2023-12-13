@@ -62,8 +62,11 @@ class MovementControl(Node):
         self.winkel_x = int((self.coordinate_x/self.max_x)*self.max_winkel_x)
         self.winkel_y = int((self.coordinate_y/self.max_y)*self.max_winkel_y)
         
-        self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
-        self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
+        # self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
+        # self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
+
+        self.servo_msg_hold[0] = + self.winkel_x
+        self.servo_msg_hold[1] = + self.winkel_y
 
         servo_msg_sent = Int32MultiArray()
 
