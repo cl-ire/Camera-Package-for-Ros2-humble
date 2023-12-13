@@ -1,13 +1,15 @@
 import cv2
-import human_detector
+import os
 
 
 class HumanDetector():
     def __init__(self):
         # Initialize the HumanDetector class with necessary attributes
         self.name = "HumanDetector"
-        self.full_body_cascade = cv2.CascadeClassifier(
-            human_detector + 'haarcascade_fullbody.xml')
+
+        xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'haarcascade_fullbody.xml')
+
+        self.full_body_cascade = cv2.CascadeClassifier(xml_path)
         self.tracker = None
         self.tracker_bbox = None
         self.selected_human = None
