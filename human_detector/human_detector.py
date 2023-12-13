@@ -1,4 +1,5 @@
 import cv2
+import human_detector
 
 
 class HumanDetector():
@@ -6,7 +7,7 @@ class HumanDetector():
         # Initialize the HumanDetector class with necessary attributes
         self.name = "HumanDetector"
         self.full_body_cascade = cv2.CascadeClassifier(
-            cv2.data.haarcascades + 'haarcascade_fullbody.xml')
+            haarcascades + 'haarcascade_fullbody.xml')
         self.tracker = None
         self.tracker_bbox = None
         self.selected_human = None
