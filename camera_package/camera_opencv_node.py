@@ -35,8 +35,7 @@ class CameraOpencv(Node):
 
 
     def listener_callback(self, Image):
-        position_data = Int32MultiArray()
-        
+                
         self.get_logger().info('Image recived')      #consoll output to confirm that a mesage was recived 
         
         try:
@@ -49,9 +48,14 @@ class CameraOpencv(Node):
         try:
             # Position = self.detector.locate_person(self.frame)
             Position = self.detector.locate_person(cv_image)
-            self.get_logger().info('Position data recived {}'.format(Position))
-
             
+            
+            if Position != []:
+                self.get_logger().info('Position data recived {}'.format(Position))
+                position_data = Int32MultiArray()
+                position_data.data = Position
+                self.publisher_.publish(position_data)
+
             # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
             
             # test code
@@ -70,10 +74,6 @@ class CameraOpencv(Node):
             # elif self.x == 4:
             #     Position = [0,0,100,800,1280,960] #output variable
             #     self.x = 0
-            
-            if Position != []:
-                position_data.data = Position
-                self.publisher_.publish(position_data)
         except:
             self.get_logger().info('no Position data recived')
 
