@@ -11,8 +11,8 @@ class MovementControl(Node):
         
         # parameters
         # camera angle
-        self.max_winkel_x = 66 + 4
-        self.max_winkel_y = 48 + 2
+        self.max_winkel_x = (66 + 4)/2
+        self.max_winkel_y = (48 + 2)/2
         # distance aproximation setings
         self.distance_to_person = 200
         self.hight_of_person = 170
