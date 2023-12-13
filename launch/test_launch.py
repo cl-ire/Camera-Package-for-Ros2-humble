@@ -20,6 +20,7 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 {'image_size': [1280,960]},
+                {'time_per_frame': [1, 1]},
             ],
         ),
 
