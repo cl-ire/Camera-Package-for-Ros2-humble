@@ -42,8 +42,7 @@ class CameraOpencv(Node):
             cv_image = self.bridge.imgmsg_to_cv2(Image, "bgr8")      #converts the ros image topic into the opencv image format
         except CvBridgeError as e:
             print(e)
-        
-        
+                
 
         try:
             # Position = self.detector.locate_person(self.frame)
@@ -52,10 +51,10 @@ class CameraOpencv(Node):
             self.get_logger().info('no Position data recived')
 
         if Position != []:
-                self.get_logger().info('Position data recived {}'.format(Position))
-                position_data = Int32MultiArray()
-                position_data.data = Position
-                self.publisher_.publish(position_data)
+            self.get_logger().info('Position data recived {}'.format(Position))
+            position_data = Int32MultiArray()
+            position_data.data = Position
+            self.publisher_.publish(position_data)
         
 
         # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
