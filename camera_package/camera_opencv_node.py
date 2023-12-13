@@ -18,7 +18,7 @@ class CameraOpencv(Node):
             Image,                      #data type
             '/image_raw',               #topic published by v4l2_camera_node
             self.listener_callback,     #function to notify that a mesage was recived
-            1)                          #queue size amount of the stored mesages  
+            5)                          #queue size amount of the stored mesages  
         self.subscription  # prevent unused variable warning
         self.publisher_ = self.create_publisher(Int32MultiArray, '/position_data', 1)
         self.bridge = CvBridge()
