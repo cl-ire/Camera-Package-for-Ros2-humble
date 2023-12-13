@@ -1,5 +1,6 @@
 import cv2
 import os
+from flask import Flask, render_template, Response
 
 
 class HumanDetector():
@@ -14,6 +15,22 @@ class HumanDetector():
         self.tracker_bbox = None
         self.selected_human = None
         self.frame_counter = 0
+
+        # video stream
+        app = Flask(__name__)
+
+        @app.route('/video_feed')
+        def video_feed():
+            #Video streaming route. Put this in the src attribute of an img tag
+            return Response(self.process_frame(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+        @app.route('/')
+        def index():
+            """Video streaming home page."""
+            return render_template('index.html')
+
+        app.run(debug=True)
 
     def locate_person(self, frame):
         # Locate a person in the frame and retrieve relevant information
@@ -79,9 +96,14 @@ class HumanDetector():
 
         # Display the processed frame (for testing purposes)
         frame = self.draw_coordinate_system(frame)
-        cv2.imshow("Video Stream", frame)
 
-        return frame
+        # cv2.imshow("Video Stream", frame)
+
+        ret, buffer = cv2.imencode('.jpg', frame)
+        ret_frame = buffer.tobytes()
+        return (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + ret_frame + b'\r\n')
+        
 
     def select_human(self, frame, humans):
         # Select the first detected human for tracking
