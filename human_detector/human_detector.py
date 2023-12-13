@@ -15,6 +15,7 @@ class HumanDetector():
         self.tracker_bbox = None
         self.selected_human = None
         self.frame_counter = 0
+        self.count = 0
 
 
     def locate_person(self, frame):
@@ -83,6 +84,10 @@ class HumanDetector():
         frame = self.draw_coordinate_system(frame)
 
         # cv2.imshow("Video Stream", frame)
+        path = ("/home/ubuntu/image/image" + str(self.count) + ".jpg")
+        self.count = self.count + 1
+        
+        cv2.imwrite(path, frame)    #saves the image in the image folder
 
         return frame
         
