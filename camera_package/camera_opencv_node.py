@@ -23,8 +23,8 @@ class CameraOpencv(Node):
 
         self.x = 1
 
-        self.get_logger().info(f"OpenCV Version: {cv2.__version__}")
-        self.get_logger().info(f"Available Attributes: {dir(cv2)}")
+        # self.get_logger().info(f"OpenCV Version: {cv2.__version__}")
+        # self.get_logger().info(f"Available Attributes: {dir(cv2)}")
 
         self.detector = human_detector.HumanDetector()
 
@@ -42,31 +42,32 @@ class CameraOpencv(Node):
         try:
             Position = self.detector.locate_person(cv_image)
             self.get_logger().info('Position data recived')
+
+            # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
+            
+            # test code
+            # if self.x == 0:
+            #     Position = [300,0,100,800,1280,960] #output variable
+            #     self.x = 1
+            # elif self.x == 1:
+            #     Position = [0,150,100,800,1280,960] #output variable
+            #     self.x = 2
+            # elif self.x == 2:
+            #     Position = [-300,0,100,800,1280,960] #output variable
+            #     self.x = 3
+            # elif self.x == 3:
+            #     Position = [0,-150,100,800,1280,960] #output variable
+            #     self.x = 4
+            # elif self.x == 4:
+            #     Position = [0,0,100,800,1280,960] #output variable
+            #     self.x = 0
+            
+            position_data.data = Position
+
+            self.publisher_.publish(position_data)
         except:
             self.get_logger().info('no Position data recived')
 
-        #opencv code
-        # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
-        
-        # if self.x == 0:
-        #     Position = [300,0,100,800,1280,960] #output variable
-        #     self.x = 1
-        # elif self.x == 1:
-        #     Position = [0,150,100,800,1280,960] #output variable
-        #     self.x = 2
-        # elif self.x == 2:
-        #     Position = [-300,0,100,800,1280,960] #output variable
-        #     self.x = 3
-        # elif self.x == 3:
-        #     Position = [0,-150,100,800,1280,960] #output variable
-        #     self.x = 4
-        # elif self.x == 4:
-        #     Position = [0,0,100,800,1280,960] #output variable
-        #     self.x = 0
-        
-        position_data.data = Position
-
-        self.publisher_.publish(position_data)
 
         time.sleep(1)
 
