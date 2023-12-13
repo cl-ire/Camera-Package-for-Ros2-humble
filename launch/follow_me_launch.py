@@ -44,4 +44,11 @@ def generate_launch_description():
             ],
         ),
 
+        Node(
+            package='camera_package',
+            executable='image_streamer',
+            name='image_streamer',
+            output='screen',
+        ),
+
     ])
