@@ -5,6 +5,7 @@ from std_msgs.msg import String, Int32MultiArray
 from cv_bridge import CvBridge
 import cv2
 import time
+import human_detector
 
 class CameraOpencv(Node):
     def __init__(self):
@@ -21,7 +22,7 @@ class CameraOpencv(Node):
 
         self.x = 1
 
-        # create Human detection object
+        self.detector = human_detector.HumanDetector()
 
 
     def listener_callback(self, Image):
@@ -34,31 +35,33 @@ class CameraOpencv(Node):
         except CvBridgeError as e:
             print(e)
         
-                
+
+        Position = self.detector.locate_person(cv_image)
+
         #opencv code
         # Position = [coordinate_x, coordinate_y, lenght_x, lenght_y, max_x, max_y]
         
-        if self.x == 0:
-            Position = [300,0,100,800,1280,960] #output variable
-            self.x = 1
-        elif self.x == 1:
-            Position = [0,150,100,800,1280,960] #output variable
-            self.x = 2
-        elif self.x == 2:
-            Position = [-300,0,100,800,1280,960] #output variable
-            self.x = 3
-        elif self.x == 3:
-            Position = [0,-150,100,800,1280,960] #output variable
-            self.x = 4
-        elif self.x == 4:
-            Position = [0,0,100,800,1280,960] #output variable
-            self.x = 0
+        # if self.x == 0:
+        #     Position = [300,0,100,800,1280,960] #output variable
+        #     self.x = 1
+        # elif self.x == 1:
+        #     Position = [0,150,100,800,1280,960] #output variable
+        #     self.x = 2
+        # elif self.x == 2:
+        #     Position = [-300,0,100,800,1280,960] #output variable
+        #     self.x = 3
+        # elif self.x == 3:
+        #     Position = [0,-150,100,800,1280,960] #output variable
+        #     self.x = 4
+        # elif self.x == 4:
+        #     Position = [0,0,100,800,1280,960] #output variable
+        #     self.x = 0
         
-        time.sleep(1)
-
         position_data.data = Position
 
         self.publisher_.publish(position_data)
+
+        time.sleep(1)
 
 
 
