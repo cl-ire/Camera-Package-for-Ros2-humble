@@ -26,6 +26,7 @@ class CameraOpencv(Node):
         # self.get_logger().info(f"OpenCV Version: {cv2.__version__}")
         # self.get_logger().info(f"Available Attributes: {dir(cv2)}")
 
+        self.frame = cv2.imread('image.jpg')
         self.detector = human_detector.HumanDetector()
 
 
@@ -39,10 +40,10 @@ class CameraOpencv(Node):
         except CvBridgeError as e:
             print(e)
         
-        cv_image = cv2.imread('image.jpg')
+        
 
         try:
-            Position = self.detector.locate_person(cv_image)
+            Position = self.detector.locate_person(self.frame)
             self.get_logger().info('Position data recived {}'.format(Position))
 
             
