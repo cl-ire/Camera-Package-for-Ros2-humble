@@ -41,7 +41,8 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 {'image_size': [1280,960]},
-                {'exposure_time_absolute': 1},
+                {'exposure_time_absolute': 1000},
+                {'exposure_dynamic_framerate': True},                
             ],
         ),
 
