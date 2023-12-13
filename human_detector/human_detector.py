@@ -53,8 +53,10 @@ class HumanDetector():
             cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
 
         self.frame_counter += 1
+        frame = self.draw_coordinate_system(frame)
+        
         if self.show_frame:
-            frame = self.draw_coordinate_system(frame)
+            
             cv2.imshow("Video Stream", frame)
 
         path = ("/home/ubuntu/image/image" + str(self.count) + ".jpg")
