@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROS Image Viewer</title>
+</head>
+<body>
+    <img id="image-viewer" src="" alt="ROS Image Viewer">
+    <script>
+        const imageViewer = document.getElementById('image-viewer');
+        const rosbridgeSocket = new WebSocket('ws://192.168.0.101:9090');  // Replace ros_machine_ip with your ROS machine's IP
+
+        rosbridgeSocket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.op === 'publish' && data.topic === '/image_raw') {
+                const imageSrc = 'data:image/jpeg;base64,' + data.msg.data;
+                imageViewer.src = imageSrc;
+            }
+        };
+    </script>
+</body>
+</html>
