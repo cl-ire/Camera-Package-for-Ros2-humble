@@ -196,6 +196,9 @@ class CameraOpencv(Node):
 
         self.x = 1
 
+        self.get_logger().info(f"OpenCV Version: {cv2.__version__}")
+        self.get_logger().info(f"Available Attributes: {dir(cv2)}")
+
         self.detector = HumanDetector()
 
 
