@@ -74,7 +74,6 @@ class CameraOpencv(Node):
             if Position != []:
                 position_data.data = Position
                 self.publisher_.publish(position_data)
-
         except:
             self.get_logger().info('no Position data recived')
 
