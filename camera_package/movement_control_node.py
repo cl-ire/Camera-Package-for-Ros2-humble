@@ -26,7 +26,7 @@ class MovementControl(Node):
             Int32MultiArray,            #data type
             '/position_data',           #topic published by camera_opencv_node
             self.listener_callback,     #function to notify that a mesage was recived
-            5)                          #queue size amount of the stored mesages  
+            1)                          #queue size amount of the stored mesages  
         self.subscription
         self.Position = []
 
@@ -40,7 +40,7 @@ class MovementControl(Node):
 
         # Servo
         self.servo_msg_hold = [0, 0]
-        self.servo_pub = self.create_publisher(Int32MultiArray, '/servo', 4)
+        self.servo_pub = self.create_publisher(Int32MultiArray, '/servo', 1)
                 
 
     def listener_callback(self, Position):
