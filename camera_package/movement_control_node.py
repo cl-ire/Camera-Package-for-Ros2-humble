@@ -21,7 +21,6 @@ class MovementControl(Node):
         self.send_delay = 2
         self.send = 2
 
-
         #Folow me 
         self.subscription = self.create_subscription(
             Int32MultiArray,            #data type
@@ -127,13 +126,10 @@ class MovementControl(Node):
 def main(args=None):
     
     rclpy.init(args=args)
-    movement_control = MovementControl()
-    rclpy.spin(movement_control)    
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    movement_control.destroy_node()
+    movement_control = MovementControl()  # create node object
+    rclpy.spin(movement_control)       # start node
+    
+    movement_control.destroy_node()    # destroy node
     rclpy.shutdown()
 
 
