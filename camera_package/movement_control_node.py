@@ -1,8 +1,7 @@
 import rclpy
 from rclpy.node import Node
-import time
 from std_msgs.msg import String, Int32MultiArray
-
+import time
 import math
 
 class MovementControl(Node):
@@ -47,12 +46,6 @@ class MovementControl(Node):
 
     def listener_callback(self, Position):
         
-        # channel 0 = pan 
-		# channel 1 = tilt
-
-        self.get_logger().info('Position recived')      #consoll output to confirm that a mesage was recived 
-        # self.Position.append(msg.data)         #save recived msg in a array
-
         self.coordinate_x = Position.data[0]
         self.coordinate_y = Position.data[1]
         self.lenght_x     = Position.data[2]
@@ -63,9 +56,6 @@ class MovementControl(Node):
         # Winkelberechnung
         self.winkel_x = int((self.coordinate_x/self.max_x)*self.max_winkel_x)
         self.winkel_y = int((self.coordinate_y/self.max_y)*self.max_winkel_y)
-        
-
-        servo_msg_sent = Int32MultiArray()
 
         self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
 
@@ -78,11 +68,15 @@ class MovementControl(Node):
                 self.send = 0
             
             if self.send == self.send_delay:
+                # channel 0 = pan 
+		        # channel 1 = tilt
+
                 self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
                 self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
 
                 self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
-            
+
+                servo_msg_sent = Int32MultiArray()
                 servo_msg_sent.data = self.servo_msg_hold
                 self.servo_pub.publish(servo_msg_sent)
 

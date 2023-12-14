@@ -5,7 +5,6 @@ from std_msgs.msg import Int32MultiArray
 from cv_bridge import CvBridge
 import cv2
 import time
-import os
 
 from opencv import human_detector
 
