@@ -19,7 +19,8 @@ class MovementControl(Node):
         self.optimal_hight_percentage = self.determine_percentage_of_height()
         # default setings 
         self.enable_movement = False
-        self.wait = True
+        self.send_delay = 2
+        self.send = 2
 
 
         #Folow me 
@@ -67,14 +68,11 @@ class MovementControl(Node):
         servo_msg_sent = Int32MultiArray()
 
         self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
-        
-        self.send_delay = 2
-        self.send = 2
-        
+
         if self.enable_movement:
             if self.winkel_x == 0 and self.winkel_y == 0:
                 self.send = 0
-            elif self.send <= self.send_delay:                
+            elif self.send < self.send_delay:                
                 self.send += 1
             else:
                 self.send = 0
@@ -99,12 +97,16 @@ class MovementControl(Node):
     def control(self, msg):
         #Joistick
         imput = msg.data
-        self.get_logger().info("Joistick Imput recived: {}".format(imput)) 
-        
+        self.get_logger().info("Joistick Imput recived: {}".format(imput))        
                 
         if imput == "Center":
             # togle movement
             self.enable_movement = not self.enable_movement
+            if self.enable_movement:
+                self.get_logger().info("Movement enabled")
+            else:
+                self.get_logger().info("Movement diabled")
+
         elif imput == "Up":
             #center servo
             servo_msg_sent = Int32MultiArray()
