@@ -1,23 +1,24 @@
 import cv2
 import os
 class HumanDetector():
-    def __init__(self, show_frame=False):
+    def __init__(self, show_frame = False, save_image = False, path_to_image = "/home/ubuntu/image", xml_file = "haarcascade_frontalface_default.xml"):
         # Initialize the HumanDetector class with necessary attributes
-        self.name = "HumanDetector"
-
-        xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'haarcascade_frontalface_default.xml')
-        self.full_body_cascade = cv2.CascadeClassifier(xml_path)
+        self.name = "HumanDetector"        
 
         self.bbox_person = None
         self.frame_counter = 0
         self.show_frame = show_frame
-        self.count = 0
+        self.save_image = save_image
+        self.path_to_image = path_to_image
+        
+        xml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data/{}".format(xml_file))     # determins relative path to the xml file
+        self.full_body_cascade = cv2.CascadeClassifier(xml_path)
 
     def locate_person(self, frame):
         values = []
 
         # Process the frame to detect and track humans
-        self.process_frame(frame)
+        image = self.process_frame(frame)
 
         # If a person is being tracked, gather information
         if self.bbox_person is not None:
@@ -28,17 +29,15 @@ class HumanDetector():
                 x_cv=self.bbox_person[0] + self.bbox_person[2] // 2, y_cv=self.bbox_person[1] + self.bbox_person[3] // 2
                 , frame_width=frame_width, frame_height=frame_height)
 
-            # custom_x center of person
-            values.append(int(custom_center_of_person[0]))
-            # custom_y center of person
-            values.append(int(custom_center_of_person[1]))
-            values.append(int(self.bbox_person[2]))  # width of person
-            values.append(int(self.bbox_person[3]))  # height of person
-            values.append(int(frame_width))
-            values.append(int(frame_height))
-            values.append(self.count)
+            values.append(int(custom_center_of_person[0]))  # custom_x center of person
+            values.append(int(custom_center_of_person[1]))  # custom_y center of person
+            values.append(int(self.bbox_person[2]))         # width of person
+            values.append(int(self.bbox_person[3]))         # height of person
+            values.append(int(frame_width))                 # width of image
+            values.append(int(frame_height))                # height of image
+            values.append(self.frame_counter)               # amount of images processed
 
-        return values
+        return values, image
 
     def process_frame(self, frame):
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -56,14 +55,15 @@ class HumanDetector():
         self.frame_counter += 1
         frame = self.draw_coordinate_system(frame)
 
-        if self.show_frame:
-            
+        if self.show_frame:            
             cv2.imshow("Video Stream", frame)
 
-        path = ("/home/ubuntu/image/image" + str(self.count) + ".jpg")
-        self.count = self.count + 1
-        
-        cv2.imwrite(path, frame)    #saves the image in the image folder
+        path = "{}/image_{:03d}.jpg".format(self.path_to_image, self.frame_counter)
+        if self.save_image:
+            try:
+                cv2.imwrite(path, frame)    #saves the image in the image folder
+            except:
+                pass
 
         return frame
 

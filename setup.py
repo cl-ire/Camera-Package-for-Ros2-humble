@@ -28,6 +28,7 @@ setup(
             'camera_opencv = camera_package.camera_opencv_node:main',
             'movement_control = camera_package.movement_control_node:main',
             'image_streamer = camera_package.camera_streamer_node:main',
+            'test_streamer = camera_package.image_streamer_node:main',            
         ],
     },
 )

@@ -19,7 +19,7 @@ class MovementControl(Node):
         self.optimal_hight_percentage = self.determine_percentage_of_height()
         # default setings 
         self.enable_movement = False
-        self.use = True
+        self.wait = True
 
 
         #Folow me 
@@ -68,9 +68,18 @@ class MovementControl(Node):
 
         self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
         
+        self.send_delay = 2
+        self.send = 2
         
         if self.enable_movement:
-            if self.use:
+            if self.winkel_x == 0 and self.winkel_y == 0:
+                self.send = 0
+            elif self.send <= self.send_delay:                
+                self.send += 1
+            else:
+                self.send = 0
+            
+            if self.send == self.send_delay:
                 self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
                 self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
 
@@ -79,15 +88,13 @@ class MovementControl(Node):
                 servo_msg_sent.data = self.servo_msg_hold
                 self.servo_pub.publish(servo_msg_sent)
 
-            self.use = not self.use
-
         try:
-            distance = self.aproximate_distance()
+            distance = self.aproximate_distance(self.lenght_y)
             self.get_logger().info("Distance to person : {}".format(distance))
         except:
             self.get_logger().info("unable to calculate Distance")
 
-        time.sleep(1)
+        time.sleep(0.2)
 
     def control(self, msg):
         #Joistick
@@ -119,8 +126,6 @@ class MovementControl(Node):
     def aproximate_distance(self, lenght_y):
         hight_percentage = (lenght_y / self.max_y)
         return int((hight_percentage / self.optimal_hight_percentage) * self.distance_to_person)
-        
-
 
 
 def main(args=None):
