@@ -14,7 +14,7 @@ class ImageStreamer(Node):
         super().__init__('image_streamer')
         self.subscription = self.create_subscription(
             Image,
-            '/opencv_image',  # Replace with your image topic
+            '/image_raw',  # Replace with your image topic
             self.image_callback,
             10  # Adjust the queue size based on your needs
         )
