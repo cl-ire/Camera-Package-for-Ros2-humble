@@ -5,7 +5,8 @@ from cv_bridge import CvBridge
 import cv2
 import os
 from flask import Flask, render_template, Response
-
+import socket
+import threading
 
 app = Flask(__name__)
 
@@ -46,10 +47,16 @@ def main():
     image_streamer = ImageStreamer()
 
     # Run Flask app in a separate thread
-    import threading
+    
+    # Get the local IP address dynamically
+    local_ip = socket.gethostbyname(socket.gethostname())
+    self.get_logger().info('access video feed on http://{}:5000'.format(local_ip))
+
     thread = threading.Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000})
     thread.daemon = True
     thread.start()
+
+    
 
     try:
         rclpy.spin(image_streamer)
