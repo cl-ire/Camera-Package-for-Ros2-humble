@@ -39,7 +39,7 @@ def generate_launch_description():
             name='v4l2_camera_node',
             output='screen',
             parameters=[
-                {'image_size': [1920,1920]},
+                {'image_size': [16384,16384]},
                 {'video_device': "/dev/video14"},     
             ],
         ),
