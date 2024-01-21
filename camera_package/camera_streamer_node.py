@@ -50,7 +50,7 @@ def main():
     
     # Get the local IP address dynamically
     local_ip = socket.gethostbyname(socket.gethostname())
-    self.get_logger().info('access video feed on http://{}:5000'.format(local_ip))
+    print(f" access video feed on http://{local_ip}:5000")
 
     thread = threading.Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000})
     thread.daemon = True
