@@ -5,6 +5,7 @@ from std_msgs.msg import Int32MultiArray
 from cv_bridge import CvBridge
 import cv2
 import time
+import movement_control_util
 
 from opencv import human_detector
 
@@ -36,6 +37,7 @@ class CameraOpencv(Node):
             print(e)
         
         try:
+            time1 = movement_control_util.get_current_time()
             value = self.detector.locate_person(cv_image)       # run opencv skript
             Position, return_image = value
 
@@ -45,6 +47,8 @@ class CameraOpencv(Node):
             self.get_logger().info('no Position data recived')
 
         if Position != []:
+            Position[7] = time1
+            Position[8] = movement_control_util.get_current_time()
             self.get_logger().info('Position data recived {}'.format(Position))
             position_data = Int32MultiArray()
             position_data.data = Position
