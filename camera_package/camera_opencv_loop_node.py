@@ -50,8 +50,6 @@ class CameraOpencv(Node):
             position_data = Int32MultiArray()
             position_data.data = Position
             self.publisher_.publish(position_data)
-            
-        time.sleep(0.2)
 
 
 def main(args=None):
