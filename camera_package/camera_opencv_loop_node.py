@@ -9,7 +9,6 @@ import movement_control_util
 
 from opencv import human_detector
 
-
 class CameraOpencv(Node):
     def __init__(self):
         super().__init__('camera_subscriber')
