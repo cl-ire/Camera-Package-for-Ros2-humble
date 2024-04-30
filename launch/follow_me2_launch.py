@@ -7,8 +7,8 @@ def generate_launch_description():
         
         Node(
             package='camera_package',
-            executable='camera_opencv_loop',
-            name='camera_opencv_loop',
+            executable='camera_opencv_loop2',
+            name='camera_opencv_loop2',
             output='screen',
         ),
         Node(

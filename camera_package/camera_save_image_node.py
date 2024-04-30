@@ -4,29 +4,32 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 
-class CameraSubscriber(Node):
+class CameraSubscriberTest(Node):
     def __init__(self):
         super().__init__('camera_subscriber')
         #create the subscriber 
         self.subscription = self.create_subscription(
             Image,                      #data type
-            '/image_raw',               #topic published by v4l2_camera_node
+            '/opencv_image',               #topic published by v4l2_camera_node
             self.listener_callback,     #function to notify that a mesage was recived
             5)                          #queue size amount of the stored mesages  
         self.subscription  # prevent unused variable warning
         self.bridge = CvBridge()
+        self.count = 0
 
     def listener_callback(self, Image):
-        self.get_logger().info('Image recived')
+        self.get_logger().info('Image recived')     #consoll output to confirm that a mesage was recived 
         
         try:
             cv_image = self.bridge.imgmsg_to_cv2(Image, "bgr8")      #converts the ros image topic into the opencv image format
         except CvBridgeError as e:
             print(e)
-        
-        cv2.imwrite("/home/ubuntu/image/image.jpg", cv_image)
 
-        #function(cv_image)         hier würde dann die funktion aufgerufen werden retun wäre dann die Koordinaten 
+        path = ("/home/ubuntu/image/image" + str(self.count) + ".jpg")
+        self.count = self.count + 1
+        
+        cv2.imwrite(path, cv_image)    #saves the image in the image folder
+ 
     
    
 
@@ -37,7 +40,7 @@ def main(args=None):
 
     rclpy.init(args=args)
 
-    camera_subscriber = CameraSubscriber()
+    camera_subscriber = CameraSubscriberTest()
 
     rclpy.spin(camera_subscriber)
 

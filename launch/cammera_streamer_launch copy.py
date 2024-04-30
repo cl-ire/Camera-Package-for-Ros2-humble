@@ -8,8 +8,8 @@ def generate_launch_description():
         
         Node(
             package='camera_package',
-            executable='web_control_center',
-            name='web_control_center',
+            executable='camera_streamer',
+            name='camera_streamer',
             output='screen',
         ),
 

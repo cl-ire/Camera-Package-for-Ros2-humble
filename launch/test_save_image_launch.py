@@ -8,20 +8,16 @@ def generate_launch_description():
         
         Node(
             package='camera_package',
-            executable='image_streamer',
-            name='image_streamer',
+            executable='camera_save_image',
+            name='camera_save_image',
             output='screen',
         ),
 
         Node(
-            package='v4l2_camera',
-            executable='v4l2_camera_node',
-            name='v4l2_camera_node',
+            package='camera_package',
+            executable='camera_opencv_loop',
+            name='camera_opencv_loop',
             output='screen',
-            parameters=[
-                {'image_size': [1280,960]},
-                {'exposure_time_absolute': 5000},
-            ],
         ),
 
     ])

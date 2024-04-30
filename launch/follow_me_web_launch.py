@@ -17,18 +17,20 @@ def generate_launch_description():
             name='movement_control',
             output='screen',
         ),
+
+        Node(
+            package='ros2_for_waveshare_alphabot2',
+            executable='pan_tilt',
+            name='camera_pan_tilt_node',
+            output='screen',
+        ),
+
         Node(
             package='ros2_for_waveshare_alphabot2',
             executable='joystick',
             name='joystick',
             output='screen',
             emulate_tty=True,
-        ),
-        Node(
-            package='camera_package',
-            executable='camera_streamer',
-            name='camera_streamer',
-            output='screen',
         ),
 
     ])

@@ -7,8 +7,8 @@ def generate_launch_description():
         
         Node(
             package='camera_package',
-            executable='camera_opencv_loop',
-            name='camera_opencv_loop',
+            executable='camera_opencv',
+            name='camera_opencv',
             output='screen',
         ),
         Node(
@@ -17,6 +17,14 @@ def generate_launch_description():
             name='movement_control',
             output='screen',
         ),
+
+        Node(
+            package='ros2_for_waveshare_alphabot2',
+            executable='pan_tilt',
+            name='camera_pan_tilt_node',
+            output='screen',
+        ),
+
         Node(
             package='ros2_for_waveshare_alphabot2',
             executable='joystick',
@@ -24,6 +32,17 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
         ),
+
+        Node(
+            package='v4l2_camera',
+            executable='v4l2_camera_node',
+            name='v4l2_camera_node',
+            output='screen',
+            parameters=[
+                {'image_size': [640,480]},                     
+            ],
+        ),
+
         Node(
             package='camera_package',
             executable='camera_streamer',
