@@ -102,25 +102,25 @@ class MovementControl(Node):
             except:
                 self.get_logger().info("unable to calculate Distance")
 
+            if self.winkel_x > 0 and self.winkel_x > 5 or self.winkel_x < 0 and self.winkel_x < -5:
+                move = False
+                speed_right, speed_left, time_out = calculate_movement_variable_time(self, self.base_rpm,self.winkel_x, move)
 
-            move = False
-            speed_right, speed_left, time_out = calculate_movement_variable_time(self, self.base_rpm,self.winkel_x, move)
+                self.motor_msg[0] = speed_right    #rpm right motor
+                self.motor_msg[1] = speed_left     #rpm left motor
+                self.motor_msg[2] = int(time_out*1000)       #time the motors will run
+                self.motor_msg[3] = 0              #rpm right motor after time_out
+                self.motor_msg[4] = 0              #rpm left motor after time_out
 
-            self.motor_msg[0] = speed_right    #rpm right motor
-            self.motor_msg[1] = speed_left     #rpm left motor
-            self.motor_msg[2] = int(time_out*1000)       #time the motors will run
-            self.motor_msg[3] = 0              #rpm right motor after time_out
-            self.motor_msg[4] = 0              #rpm left motor after time_out
+                self.get_logger().info("Motor data: {}".format(self.motor_msg))
 
-            self.get_logger().info("Motor data: {}".format(self.motor_msg))
-
-            if self.enable_movement:
-                motor_msg_sent = Int32MultiArray()
-                motor_msg_sent.data = self.motor_msg
-                self.motor_pub.publish(motor_msg_sent)
-                self.get_logger().info("Data sent to Motor: {}".format(self.motor_msg))
-
-            self.old_time = add_seconds_to_time(old_time, time_out + 0.15)
+                if self.enable_movement:
+                    motor_msg_sent = Int32MultiArray()
+                    motor_msg_sent.data = self.motor_msg
+                    self.motor_pub.publish(motor_msg_sent)
+                    self.get_logger().info("Data sent to Motor: {}".format(self.motor_msg))
+                self.old_time = add_seconds_to_time(old_time, time_out + 0.15)
+            
         # else:
         #     self.get_logger().info("Data not used old time: {} - new time {}".format(self.old_time, self.time1))
     
