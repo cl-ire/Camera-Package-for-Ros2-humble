@@ -13,6 +13,10 @@ from opencv import human_detector_yolo, human_detector
 class CameraOpencv(Node):
     def __init__(self):
         super().__init__('camera_subscriber')
+
+        self.declare_parameter('detector_type', "haarcascade")
+        self.declare_parameter('timer_period', 0.5) # seconds
+
         self.publisher_ = self.create_publisher(
             Int32MultiArray, '/position_data', 1)
         self.image_publisher = self.create_publisher(Image, '/opencv_image', 1)
@@ -20,14 +24,21 @@ class CameraOpencv(Node):
 
         try:
             self.vid0 = cv2.VideoCapture(0)
-            self.vid0.set(cv2.CAP_PROP_BUFFERSIZE, 0)
+            self.vid0.set(cv2.CAP_PROP_BUFFERSIZE, 1)
         except:
             pass
 
-        self.detector = human_detector_yolo.HumanDetector()
-        # self.detector = human_detector.HumanDetector()
+        if self.get_parameter('detector_type').value == "yolo":
+            self.detector = human_detector_yolo.HumanDetector()
+            self.detector_active = True
+        elif self.get_parameter('detector_type').value == "haarcascade":
+            self.detector = human_detector.HumanDetector()
+            self.detector_active = True
+        elif self.get_parameter('detector_type').value == "none":
+            self.detector_active = False
 
-        timer_period = 0.5  # seconds
+
+        timer_period = self.get_parameter('timer_period').value
         self.timer = self.create_timer(timer_period, self.loop)
 
     def loop(self):
@@ -37,8 +48,12 @@ class CameraOpencv(Node):
 
             # self.get_logger().info('Image shot at {}'.format(time1))
             ret, image = self.vid0.read()
-            value = self.detector.locate_person(image)       # run opencv skript
-            Position, return_image = value
+            if self.detector_active:
+                value = self.detector.locate_person(image)       # run opencv skript
+                Position, return_image = value
+            else:
+                return_image = image
+                Position = []
 
             # self.get_logger().info('Image processed at {}'.format(movement_control_util.get_current_time()))
             # self.get_logger().info('Image published with data {}'.format(Position))

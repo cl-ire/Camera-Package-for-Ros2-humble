@@ -7,6 +7,10 @@ import cv2
 class CameraSubscriberTest(Node):
     def __init__(self):
         super().__init__('camera_subscriber')
+
+        self.declare_parameter('path', "/home/ubuntu/image/")
+        self.path = self.get_parameter('path').value
+
         #create the subscriber 
         self.subscription = self.create_subscription(
             Image,                      #data type
@@ -25,30 +29,19 @@ class CameraSubscriberTest(Node):
         except CvBridgeError as e:
             print(e)
 
-        path = ("/home/ubuntu/image/image" + str(self.count) + ".jpg")
+        image_path = (self.path + "image" + str(self.count) + ".jpg")
         self.count = self.count + 1
         
-        cv2.imwrite(path, cv_image)    #saves the image in the image folder
- 
-    
-   
+        cv2.imwrite(image_path, cv_image)    #saves the image in the image folder
+
 
 
 def main(args=None):
     
-    #setup für die berechnung
-
     rclpy.init(args=args)
-
     camera_subscriber = CameraSubscriberTest()
+    rclpy.spin(camera_subscriber)    
 
-    rclpy.spin(camera_subscriber)
-
-    
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
     camera_subscriber.destroy_node()
     rclpy.shutdown()
 

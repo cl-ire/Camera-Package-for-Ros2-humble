@@ -7,9 +7,13 @@ def generate_launch_description():
         
         Node(
             package='camera_package',
-            executable='camera_opencv_loop2',
+            executable='camera_opencv_loop',
             name='camera_opencv_loop2',
             output='screen',
+            parameters=[
+                {'detector_type': "haarcascade"},
+                {'timer_period': 0.5},
+            ]
         ),
         Node(
             package='camera_package',
@@ -28,13 +32,6 @@ def generate_launch_description():
                 {'motor_settings_base_rpm': 50},
                 {'enable_movement': True},
             ]
-        ),
-        Node(
-            package='ros2_for_waveshare_alphabot2',
-            executable='joystick',
-            name='joystick',
-            output='screen',
-            emulate_tty=True,
         ),
         Node(
             package='camera_package',

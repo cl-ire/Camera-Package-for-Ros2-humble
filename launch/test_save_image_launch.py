@@ -11,6 +11,9 @@ def generate_launch_description():
             executable='camera_save_image',
             name='camera_save_image',
             output='screen',
+            parameters=[
+                {'path': "/home/ubuntu/image/"},
+            ]
         ),
 
         Node(
@@ -18,6 +21,10 @@ def generate_launch_description():
             executable='camera_opencv_loop',
             name='camera_opencv_loop',
             output='screen',
+            parameters=[
+                {'detector_type': "none"},
+                {'timer_period': 0.5},
+            ]
         ),
 
     ])

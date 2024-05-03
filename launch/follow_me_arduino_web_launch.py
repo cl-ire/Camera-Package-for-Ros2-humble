@@ -8,7 +8,7 @@ def generate_launch_description():
         Node(
             package='camera_package',
             executable='camera_opencv_loop',
-            name='camera_opencv_loop',
+            name='camera_opencv_loop2',
             output='screen',
             parameters=[
                 {'detector_type': "haarcascade"},
@@ -26,24 +26,23 @@ def generate_launch_description():
                 {'distance_to_person': 200},
                 {'hight_of_person': 170},
                 {'motor_settings_radius': 25},
-                {'motor_settings_wheel_distance': 9},
-                {'motor_settings_wheel_radius': 2.3},
+                {'motor_settings_wheel_distance': 11},
+                {'motor_settings_wheel_radius': 3.5},
                 {'motor_settings_correction_factor': 1},
                 {'motor_settings_base_rpm': 50},
-                {'enable_movement': False},
+                {'enable_movement': True},
             ]
         ),
         Node(
-            package='ros2_for_waveshare_alphabot2',
-            executable='joystick',
-            name='joystick',
+            package='camera_package',
+            executable='web_control_center',
+            name='web_control_center',
             output='screen',
-            emulate_tty=True,
         ),
         Node(
             package='camera_package',
-            executable='camera_streamer',
-            name='camera_streamer',
+            executable='arduino_interface',
+            name='arduino_interface',
             output='screen',
         ),
 
