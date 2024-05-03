@@ -29,7 +29,7 @@ def generate_launch_description():
                 {'motor_settings_wheel_distance': 11},
                 {'motor_settings_wheel_radius': 3.5},
                 {'motor_settings_correction_factor': 1},
-                {'motor_settings_base_rpm': 50},
+                {'motor_settings_base_rpm': 100},
                 {'enable_movement': True},
             ]
         ),

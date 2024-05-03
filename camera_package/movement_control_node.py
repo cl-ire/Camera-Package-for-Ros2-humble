@@ -68,6 +68,7 @@ class MovementControl(Node):
         self.servo_pub = self.create_publisher(Int32MultiArray, '/servo', 1)
         self.motor_msg = [0, 0, 0, 0, 0]
         self.motor_pub = self.create_publisher(Int32MultiArray, '/motor', 1)
+        self.take_picture = self.create_publisher(String, '/take_picture', 1)
                 
 
     def position_callback(self, Position):
@@ -120,6 +121,11 @@ class MovementControl(Node):
                     self.motor_pub.publish(motor_msg_sent)
                     self.get_logger().info("Data sent to Motor: {}".format(self.motor_msg))
                 self.old_time = add_seconds_to_time(old_time, time_out + 0.15)
+
+                time.sleep(time_out + 0.15)
+                self.take_picture.publish(String(data="take_picture"))
+            
+
             
         # else:
         #     self.get_logger().info("Data not used old time: {} - new time {}".format(self.old_time, self.time1))

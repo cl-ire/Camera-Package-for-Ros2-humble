@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
-from std_msgs.msg import Int32MultiArray
+from std_msgs.msg import Int32MultiArray, String
 from cv_bridge import CvBridge
 import cv2
 import traceback
@@ -16,6 +16,14 @@ class CameraOpencv(Node):
 
         self.declare_parameter('detector_type', "haarcascade")
         self.declare_parameter('timer_period', 0.5) # seconds
+
+        self.subscription = self.create_subscription(
+            String,
+            '/take_picture',
+            self.loop,
+            10
+        )
+
 
         self.publisher_ = self.create_publisher(
             Int32MultiArray, '/position_data', 1)
@@ -38,8 +46,8 @@ class CameraOpencv(Node):
             self.detector_active = False
 
 
-        timer_period = self.get_parameter('timer_period').value
-        self.timer = self.create_timer(timer_period, self.loop)
+        # timer_period = self.get_parameter('timer_period').value
+        # self.timer = self.create_timer(timer_period, self.loop)
 
     def loop(self):
         try:
@@ -47,6 +55,7 @@ class CameraOpencv(Node):
             Position = []
 
             # self.get_logger().info('Image shot at {}'.format(time1))
+            ret, image = self.vid0.read()
             ret, image = self.vid0.read()
             if self.detector_active:
                 value = self.detector.locate_person(image)       # run opencv skript
