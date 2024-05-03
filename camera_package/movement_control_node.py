@@ -9,28 +9,36 @@ from opencv.movement_control_util import calculate_movement_variable_time, set_t
 class MovementControl(Node):
     def __init__(self):
         super().__init__('movement_control')
+
+        self.declare_parameter('camera_max_winkel_x', 90)
+        self.declare_parameter('camera_max_winkel_y', 50)
+        self.declare_parameter('distance_to_person', 200)
+        self.declare_parameter('hight_of_person', 170)
+        self.declare_parameter('motor_settings_radius', 25)
+        self.declare_parameter('motor_settings_wheel_distance', 11)
+        self.declare_parameter('motor_settings_wheel_radius', 3.5)
+        self.declare_parameter('motor_settings_correction_factor', 1)
+        self.declare_parameter('motor_settings_base_rpm', 50)        
+        self.declare_parameter('enable_movement', False)
         
-        # parameters
-        # camera angle
-        self.max_winkel_x = 90
-        self.max_winkel_y = 50
-        # distance aproximation setings
-        self.distance_to_person = 200
-        self.hight_of_person = 170
-        self.optimal_hight_percentage = determine_percentage_of_height(self)
         # movement settings Alphabot2
         # self.radius = 25
         # self.wheel_distance = 10
         # self.wheel_radius = 1.5
         # self.correction_factor = 1
 
-        # movement settings Arduino
-        self.radius = 25
-        self.wheel_distance = 11
-        self.wheel_radius = 3.5
-        self.correction_factor = 1
+        self.max_winkel_x = self.get_parameter('camera_max_winkel_x').value
+        self.max_winkel_y = self.get_parameter('camera_max_winkel_y').value
+        self.distance_to_person = self.get_parameter('distance_to_person').value
+        self.hight_of_person = self.get_parameter('hight_of_person').value
+        self.optimal_hight_percentage = determine_percentage_of_height(self)
+        self.radius = self.get_parameter('motor_settings_radius').value
+        self.wheel_distance = self.get_parameter('motor_settings_wheel_distance').value
+        self.wheel_radius = self.get_parameter('motor_settings_wheel_radius').value
+        self.correction_factor = self.get_parameter('motor_settings_correction_factor').value
+        self.base_rpm = self.get_parameter('motor_settings_base_rpm').value
 
-        self.enable_movement = True
+        self.enable_movement = self.get_parameter('enable_movement').value
 
         # default time the vihical is moving       
         self.old_time = datetime.datetime.strptime("00:00:00.000000", "%H:%M:%S.%f").time()
@@ -100,9 +108,8 @@ class MovementControl(Node):
                 self.get_logger().info("unable to calculate Distance")
 
 
-            base_rpm = 50
             move = False
-            speed_right, speed_left, time_out = calculate_movement_variable_time(self, base_rpm,self.winkel_x, move)
+            speed_right, speed_left, time_out = calculate_movement_variable_time(self, self.base_rpm,self.winkel_x, move)
 
             self.motor_msg[0] = speed_right    #rpm right motor
             self.motor_msg[1] = speed_left     #rpm left motor
