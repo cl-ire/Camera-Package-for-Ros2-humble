@@ -78,8 +78,8 @@ def calculate_movement_variable_time(self, base_rpm, angle, move = False):
 
 def calculate_angle(self, servo_pan = True):
     # Winkelberechnung
-    self.winkel_x = int((self.coordinate_x/self.max_x)*self.max_winkel_x)
-    self.winkel_y = int((self.coordinate_y/self.max_y)*self.max_winkel_y)
+    self.winkel_x = int((self.coordinate_x/(self.max_x/2))*self.max_winkel_x)
+    self.winkel_y = int((self.coordinate_y/(self.max_y/2))*self.max_winkel_y)
     self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
 
     self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x

@@ -21,11 +21,6 @@ class MovementControl(Node):
         self.declare_parameter('motor_settings_base_rpm', 50)        
         self.declare_parameter('enable_movement', False)
         
-        # movement settings Alphabot2
-        # self.radius = 25
-        # self.wheel_distance = 10
-        # self.wheel_radius = 1.5
-        # self.correction_factor = 1
 
         self.max_winkel_x = self.get_parameter('camera_max_winkel_x').value
         self.max_winkel_y = self.get_parameter('camera_max_winkel_y').value
@@ -125,7 +120,7 @@ class MovementControl(Node):
                 self.motor_pub.publish(motor_msg_sent)
                 self.get_logger().info("Data sent to Motor: {}".format(self.motor_msg))
 
-            self.old_time = add_seconds_to_time(old_time, time_out)
+            self.old_time = add_seconds_to_time(old_time, time_out + 0.15)
         # else:
         #     self.get_logger().info("Data not used old time: {} - new time {}".format(self.old_time, self.time1))
     
