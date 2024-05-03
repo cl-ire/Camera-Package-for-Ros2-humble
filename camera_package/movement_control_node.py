@@ -30,7 +30,7 @@ class MovementControl(Node):
         self.wheel_radius = 3.5
         self.correction_factor = 1
 
-        self.enable_movement = False
+        self.enable_movement = True
 
         # default time the vihical is moving       
         self.old_time = datetime.datetime.strptime("00:00:00.000000", "%H:%M:%S.%f").time()
