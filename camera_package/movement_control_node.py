@@ -10,7 +10,7 @@ class MovementControl(Node):
     def __init__(self):
         super().__init__('movement_control')
 
-        self.declare_parameter('camera_max_winkel_x', 90)
+        self.declare_parameter('camera_max_winkel_x', 85)
         self.declare_parameter('camera_max_winkel_y', 50)
         self.declare_parameter('distance_to_person', 200)
         self.declare_parameter('hight_of_person', 170)
@@ -18,7 +18,7 @@ class MovementControl(Node):
         self.declare_parameter('motor_settings_wheel_distance', 11)
         self.declare_parameter('motor_settings_wheel_radius', 3.5)
         self.declare_parameter('motor_settings_correction_factor', 1)
-        self.declare_parameter('motor_settings_base_rpm', 50)        
+        self.declare_parameter('motor_settings_base_rpm', 100)        
         self.declare_parameter('enable_movement', False)
         
 

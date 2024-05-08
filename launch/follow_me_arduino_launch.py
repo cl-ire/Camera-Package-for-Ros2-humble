@@ -21,7 +21,7 @@ def generate_launch_description():
             name='movement_control',
             output='screen',
             parameters=[
-                {'camera_max_winkel_x': 90},
+                {'camera_max_winkel_x': 85},
                 {'camera_max_winkel_y': 50},
                 {'distance_to_person': 200},
                 {'hight_of_person': 170},
