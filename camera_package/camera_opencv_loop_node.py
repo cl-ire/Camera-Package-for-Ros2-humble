@@ -16,6 +16,7 @@ class CameraOpencv(Node):
 
         self.declare_parameter('detector_type', "haarcascade")
         self.declare_parameter('timer_period', 0.5) # seconds
+        self.declare_parameter('detector_path', "/home/ubuntu/ros2_ws/src/yolo_config/")
     
 
 
@@ -31,7 +32,8 @@ class CameraOpencv(Node):
             pass
 
         if self.get_parameter('detector_type').value == "yolo":
-            self.detector = human_detector_yolo.HumanDetector()
+            detector_path = self.get_parameter('detector_path').value
+            self.detector = human_detector_yolo.HumanDetector(path=detector_path)
             self.detector_active = True
         elif self.get_parameter('detector_type').value == "haarcascade":
             self.detector = human_detector.HumanDetector()

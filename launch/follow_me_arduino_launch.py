@@ -11,8 +11,9 @@ def generate_launch_description():
             name='camera_opencv_loop2',
             output='screen',
             parameters=[
-                {'detector_type': "haarcascade"},
+                {'detector_type': "yolo"},
                 {'timer_period': 0.5},
+                {'detector_path': "/home/jetson/ros2_ws/src/yolo_config/"},
             ]
         ),
         Node(
@@ -38,6 +39,9 @@ def generate_launch_description():
             executable='camera_streamer',
             name='camera_streamer',
             output='screen',
+             parameters=[
+                {'ip': "192.168.5.1"},
+            ]
         ),
         Node(
             package='camera_package',

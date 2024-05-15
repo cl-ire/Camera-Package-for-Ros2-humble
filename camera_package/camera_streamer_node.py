@@ -21,6 +21,11 @@ app = Flask(__name__, template_folder=templates_path, static_folder=static_path)
 class ImageStreamer(Node):
     def __init__(self):
         super().__init__('image_streamer')
+
+        self.declare_parameter('ip', "0.0.0.0")
+
+        self.ip = self.get_parameter('ip').value
+
         self.subscription = self.create_subscription(
             Image,
             '/opencv_image',  # Replace with your image topic
@@ -62,7 +67,7 @@ def main():
     print(f" access video feed on http://{local_ip}:5000")
     print('--------------------------------------------')
 
-    thread = threading.Thread(target=app.run, kwargs={'host': '0.0.0.0', 'port': 5000})
+    thread = threading.Thread(target=app.run, kwargs={'host': image_streamer.ip, 'port': 5000})
     thread.daemon = True
     thread.start()
 

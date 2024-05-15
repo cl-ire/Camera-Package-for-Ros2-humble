@@ -4,10 +4,9 @@ import cv2
 import numpy as np
 
 class HumanDetector():
-    def __init__(self, show_frame = False):
+    def __init__(self, show_frame = False, path = '/home/ubuntu/ros2_ws/src/yolo_config/'):
         # Initialize the HumanDetector class with necessary attributes
         self.name = "HumanDetector"
-        path = '/home/ubuntu/ros2_ws/src/yolo_config/'
         self.net = cv2.dnn.readNetFromDarknet(path + 'yolov3.cfg', path + 'yolov3.weights')
         self.layer_names = self.net.getLayerNames()
         self.layer_names = [self.layer_names[i - 1] for i in self.net.getUnconnectedOutLayers()]
