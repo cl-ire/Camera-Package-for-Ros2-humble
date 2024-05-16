@@ -14,6 +14,7 @@ def generate_launch_description():
                 {'detector_type': "yolo"},
                 {'timer_period': 0.5},
                 {'detector_path': "/home/jetson/ros2_ws/src/yolo_config/"},
+                {'optimal_hight_percentage': 75},
             ]
         ),
         Node(

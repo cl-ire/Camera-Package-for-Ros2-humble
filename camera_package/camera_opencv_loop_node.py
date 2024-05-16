@@ -17,6 +17,8 @@ class CameraOpencv(Node):
         self.declare_parameter('detector_type', "haarcascade")
         self.declare_parameter('timer_period', 0.5) # seconds
         self.declare_parameter('detector_path', "/home/ubuntu/ros2_ws/src/yolo_config/")
+
+        self.declare_parameter('optimal_hight_percentage', 75)
     
 
 
@@ -33,7 +35,8 @@ class CameraOpencv(Node):
 
         if self.get_parameter('detector_type').value == "yolo":
             detector_path = self.get_parameter('detector_path').value
-            self.detector = human_detector_yolo.HumanDetector(path=detector_path)
+            optimal_hight_percentage = self.get_parameter('optimal_hight_percentage').value
+            self.detector = human_detector_yolo.HumanDetector(path=detector_path, optimal_hight_percentage=optimal_hight_percentage)
             self.detector_active = True
         elif self.get_parameter('detector_type').value == "haarcascade":
             self.detector = human_detector.HumanDetector()
@@ -65,10 +68,7 @@ class CameraOpencv(Node):
             self.publish_data(Position, time1, return_image)
 
         except Exception as e:
-            self.get_logger().info('Error: %s' % str(e))
-        
-
-            
+            self.get_logger().info('Error: %s' % str(e))            
 
     def publish_data(self, Position, time1, return_image):
 
@@ -77,12 +77,12 @@ class CameraOpencv(Node):
             self.image_publisher.publish(return_image_msg)
 
             if Position != []:
-                while len(Position) < 11:
+                while len(Position) < 12:
                     Position.append(0)
                                
 
-                Position[7], Position[8]= movement_control_util.datetime_to_combined_int(time1)
-                Position[9], Position[10] = movement_control_util.datetime_to_combined_int(movement_control_util.get_current_time())
+                Position[8], Position[9]= movement_control_util.datetime_to_combined_int(time1)
+                Position[10], Position[11] = movement_control_util.datetime_to_combined_int(movement_control_util.get_current_time())
                 # self.get_logger().info('Position data recived {}'.format(Position))
                 position_data = Int32MultiArray()
                 position_data.data = Position

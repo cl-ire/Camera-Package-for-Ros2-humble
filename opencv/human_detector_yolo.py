@@ -4,8 +4,9 @@ import cv2
 import numpy as np
 
 class HumanDetector():
-    def __init__(self, show_frame = False, path = '/home/ubuntu/ros2_ws/src/yolo_config/'):
+    def __init__(self, show_frame = False, path = '/home/ubuntu/ros2_ws/src/yolo_config/', optimal_hight_percentage = 75):
         # Initialize the HumanDetector class with necessary attributes
+        self.optimal_hight_percentage = optimal_hight_percentage
         self.name = "HumanDetector"
         self.net = cv2.dnn.readNetFromDarknet(path + 'yolov3.cfg', path + 'yolov3.weights')
         self.layer_names = self.net.getLayerNames()
@@ -65,7 +66,7 @@ class HumanDetector():
             # Überprüfen, ob die Person im Ganzen zu sehen ist
             aspect_ratio = w / h
             #print(f'ratio: {aspect_ratio}')
-            if aspect_ratio < 0.5:  # Beispiel: Seitenverhältnis überprüfen
+            if aspect_ratio < 1:  # Beispiel: Seitenverhältnis überprüfen
                 self.detected_humans.append(yolo_box)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
@@ -74,11 +75,10 @@ class HumanDetector():
             x, y, w, h = self.selected_human
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-
-
-            custom_x, custom_y = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
+            # custom_x, custom_y = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
             custom_center_of_person = self.cv_to_custom_coordinates(x_cv=x + w // 2, y_cv=y + h // 2, frame_width=frame_height,frame_height=frame_height)
-            percentage_of_frame_height = self.get_percentage_of_height(self.selected_human, frame_height)
+            # percentage_of_frame_height = self.get_percentage_of_height(self.selected_human, frame_height)
+            move_forward = self.move_robot(hight_of_person=h, frame_height=frame_height)
 
             # custom_x center of person
             values.append(custom_center_of_person[0])
@@ -89,11 +89,13 @@ class HumanDetector():
             # values.append(percentage_of_frame_height)
             values.append(width)
             values.append(frame_height)
+            values.append(move_forward)
         # Increment the frame counter
         self.frame_counter += 1
+
+        frame = self.draw_coordinate_system(frame)
         if self.show_frame == True:
-            # Display the processed frame (for testing purposes)
-            frame = self.draw_coordinate_system(frame)
+            # Display the processed frame (for testing purposes)            
             cv2.imshow("Video Stream", frame)
         #self.selected_human = None
         self.detected_humans = []
@@ -108,6 +110,7 @@ class HumanDetector():
                 scores = detection[5:]
                 class_id = np.argmax(scores)
                 confidence = scores[class_id]
+
     def get_percentage_of_height(self, location, frame_height):
         # Function to get the Percentage of the Person in the Picture
         if frame_height > 0:
@@ -116,6 +119,19 @@ class HumanDetector():
             return round(percentage_of_height)
         else:
             return None
+        
+    def move_robot(self, hight_of_person, frame_height):
+        self.optimal_hight_percentage 
+        if frame_height > 0:
+            percentage_of_height = (hight_of_person/frame_height*100)
+
+            if percentage_of_height < self.optimal_hight_percentage:
+                # Move forward
+                return 1
+            else:
+                # Stay still
+                return 0
+    
 
     def draw_coordinate_system(self, frame):
 

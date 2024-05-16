@@ -26,12 +26,13 @@ class MovementControl(Node):
         self.max_winkel_y = self.get_parameter('camera_max_winkel_y').value
         self.distance_to_person = self.get_parameter('distance_to_person').value
         self.hight_of_person = self.get_parameter('hight_of_person').value
-        self.optimal_hight_percentage = determine_percentage_of_height(self)
         self.radius = self.get_parameter('motor_settings_radius').value
         self.wheel_distance = self.get_parameter('motor_settings_wheel_distance').value
         self.wheel_radius = self.get_parameter('motor_settings_wheel_radius').value
         self.correction_factor = self.get_parameter('motor_settings_correction_factor').value
         self.base_rpm = self.get_parameter('motor_settings_base_rpm').value
+
+        # self.optimal_hight_percentage = determine_percentage_of_height(self)
 
         self.enable_movement = self.get_parameter('enable_movement').value
 
@@ -79,8 +80,9 @@ class MovementControl(Node):
         self.lenght_y     = Position.data[3]
         self.max_x        = Position.data[4]
         self.max_y        = Position.data[5]
-        self.time1        = combined_int_to_datetime(Position.data[7], Position.data[8])
-        self.time2        = combined_int_to_datetime(Position.data[9], Position.data[10])
+        self.move_forward = Position.data[6]
+        self.time1        = combined_int_to_datetime(Position.data[8], Position.data[9])
+        self.time2        = combined_int_to_datetime(Position.data[10], Position.data[11])
 
         self.get_logger().info('Position data recived {}'.format(Position.data))
         
@@ -88,6 +90,7 @@ class MovementControl(Node):
         use_data, old_time = compare_times(self.time1, self.time2, self.old_time)
 
         if use_data:           
+            move = False
 
             self.servo_msg_hold, self.winkel_x, self.winkel_y = calculate_angle(self)
 
@@ -97,14 +100,15 @@ class MovementControl(Node):
                 self.servo_pub.publish(servo_msg_sent)
                 self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
 
-            try:                
-                distance = aproximate_distance(self, self.lenght_y)
-                # self.get_logger().info("Distance to person : {}".format(distance))
-            except:
-                self.get_logger().info("unable to calculate Distance")
+            if self.move_forward == 1:
+                move = True
+            elif self.move_forward == -1:
+                move = True
+            else:
+                move = False
 
             if self.winkel_x > 0 and self.winkel_x > 5 or self.winkel_x < 0 and self.winkel_x < -5:
-                move = False
+                
                 speed_right, speed_left, time_out = calculate_movement_variable_time(self, self.base_rpm,self.winkel_x, move)
 
                 self.motor_msg[0] = speed_right    #rpm right motor
@@ -121,10 +125,6 @@ class MovementControl(Node):
                     self.motor_pub.publish(motor_msg_sent)
                     self.get_logger().info("Data sent to Motor: {}".format(self.motor_msg))
                 self.old_time = add_seconds_to_time(old_time, time_out + 0.15)
-
-            
-
-            
         # else:
         #     self.get_logger().info("Data not used old time: {} - new time {}".format(self.old_time, self.time1))
     
@@ -175,8 +175,7 @@ class MovementControl(Node):
             self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
             servo_msg_sent.data = [0, 0]
             self.servo_pub.publish(servo_msg_sent)
-            time.sleep(1)
-        
+            time.sleep(1)        
     
     
 def main(args=None):
