@@ -4,10 +4,24 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Int32MultiArray
 from cv_bridge import CvBridge
 import cv2
+import threading
 import traceback
 from opencv import movement_control_util
 
 from opencv import human_detector_yolo, human_detector
+
+
+# Define the thread that will continuously pull frames from the camera
+class CameraBufferCleanerThread(threading.Thread):
+    def __init__(self, camera, name='camera-buffer-cleaner-thread'):
+        self.camera = camera
+        self.last_frame = None
+        super(CameraBufferCleanerThread, self).__init__(name=name)
+        self.start()
+
+    def run(self):
+        while True:
+            ret, self.last_frame = self.camera.read()
 
 
 class CameraOpencv(Node):
@@ -28,20 +42,8 @@ class CameraOpencv(Node):
         self.bridge = CvBridge()
 
         try:
-            self.vid0 = cv2.VideoCapture(0)
-            # self.vid0 = cv2.VideoCapture(0, cv2.CAP_V4L2)
-            if self.vid0.set(cv2.CAP_PROP_BUFFERSIZE, 0):
-                self.get_logger().info('Buffer size set to 0.')
-            else:
-                self.get_logger().info('Buffer size not set.')
-
-            # self.vid0.set(cv2.CAP_PROP_FPS, 10)
-
-            # actual_frame_rate = self.vid0.get(cv2.CAP_PROP_FPS)
-            # actual_width = self.vid0.get(cv2.CAP_PROP_FRAME_WIDTH)
-            # actual_height = self.vid0.get(cv2.CAP_PROP_FRAME_HEIGHT)
-            # self.get_logger().info('frame rate: {} resolution: {} x {}'.format(actual_frame_rate, actual_width, actual_height))
-
+            camera = cv2.VideoCapture(0)                    # Start the camera            
+            self.vid0 = CameraBufferCleanerThread(camera)   # Start the cleaning thread
         except:
             pass
 
@@ -66,8 +68,12 @@ class CameraOpencv(Node):
             Position = []
 
             # self.get_logger().info('Image shot at {}'.format(time1))
-            ret, image = self.vid0.read()
-            ret, image = self.vid0.read()
+            # ret, image = self.vid0.read()
+            # ret, image = self.vid0.read()
+            
+            if self.vid0.last_frame is not None:
+                image = self.vid0.last_frame
+
             if self.detector_active:
                 value = self.detector.locate_person(image)       # run opencv skript
                 Position, return_image = value
