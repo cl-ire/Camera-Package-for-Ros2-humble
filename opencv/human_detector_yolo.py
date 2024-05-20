@@ -75,7 +75,7 @@ class HumanDetector():
             x, y, w, h = self.selected_human
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-            custom_x, custom_y = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
+            x_custom, y_custom = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
             # x_custom, y_custom = self.cv_to_custom_coordinates(x_cv=x + w // 2, y_cv=y + h // 2, frame_width=frame_height,frame_height=frame_height)
             # percentage_of_frame_height = self.get_percentage_of_height(self.selected_human, frame_height)
             move_forward = self.move_robot(hight_of_person=h, frame_height=frame_height)
