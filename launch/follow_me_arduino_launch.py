@@ -12,7 +12,7 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 {'detector_type': "yolo"},
-                {'timer_period': 0.1},
+                {'timer_period': 0.2},
                 {'detector_path': "/home/jetson/ros2_ws/src/yolo_config/"},
                 {'optimal_hight_percentage': 75},
             ]
@@ -30,7 +30,7 @@ def generate_launch_description():
                 {'motor_settings_radius': 35},
                 {'motor_settings_wheel_distance': 11},
                 {'motor_settings_wheel_radius': 3.5},
-                {'motor_settings_correction_factor': 1},
+                {'motor_settings_correction_factor': 1.0},
                 {'motor_settings_base_rpm': 100},
                 {'enable_movement': True},
             ]

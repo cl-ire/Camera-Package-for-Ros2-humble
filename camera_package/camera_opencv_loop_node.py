@@ -5,7 +5,6 @@ from std_msgs.msg import Int32MultiArray
 from cv_bridge import CvBridge
 import cv2
 import traceback
-import time
 from opencv import movement_control_util
 
 from opencv import human_detector_yolo, human_detector
@@ -46,14 +45,8 @@ class CameraOpencv(Node):
             self.detector_active = False
 
 
-        self.timer_period = self.get_parameter('timer_period').value
-        # self.timer = self.create_timer(self.timer_period, self.loop)
-
-    
-    def run(self):
-        while True:
-            self.loop()
-            time.sleep(self.timer_period) 
+        timer_period = self.get_parameter('timer_period').value
+        self.timer = self.create_timer(timer_period, self.loop)
 
     def loop(self):
         try:
