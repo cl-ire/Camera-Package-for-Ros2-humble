@@ -28,7 +28,8 @@ class CameraOpencv(Node):
         self.bridge = CvBridge()
 
         try:
-            self.vid0 = cv2.VideoCapture(0)
+            # self.vid0 = cv2.VideoCapture(0)
+            self.vid0 = cv2.VideoCapture(0, cv2.CAP_V4L2)
             self.vid0.set(cv2.CAP_PROP_BUFFERSIZE, 1)
             self.vid0.set(cv2.CAP_PROP_FPS, 10)
 
