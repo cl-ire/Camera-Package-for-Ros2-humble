@@ -108,7 +108,7 @@ class MovementControl(Node):
                 move = False
 
             if move:                
-                if self.winkel_x > 0 and self.winkel_x > 5 or self.winkel_x < 0 and self.winkel_x < -5:
+                if self.winkel_x > 0 and self.winkel_x < 5 or self.winkel_x < 0 and self.winkel_x > -5:
                     self.winkel_x = 0
 
                 speed_right, speed_left, time_out = calculate_movement_variable_time(self, self.base_rpm,self.winkel_x, move)
