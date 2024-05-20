@@ -17,7 +17,7 @@ class MovementControl(Node):
         self.declare_parameter('motor_settings_radius', 25)
         self.declare_parameter('motor_settings_wheel_distance', 11)
         self.declare_parameter('motor_settings_wheel_radius', 3.5)
-        self.declare_parameter('motor_settings_correction_factor', 1)
+        self.declare_parameter('motor_settings_correction_factor', 1.0)
         self.declare_parameter('motor_settings_base_rpm', 100)        
         self.declare_parameter('enable_movement', False)
         
@@ -107,8 +107,10 @@ class MovementControl(Node):
             else:
                 move = False
 
-            if self.winkel_x > 0 and self.winkel_x > 5 or self.winkel_x < 0 and self.winkel_x < -5:
-                
+            if move:                
+                if self.winkel_x > 0 and self.winkel_x > 5 or self.winkel_x < 0 and self.winkel_x < -5:
+                    self.winkel_x = 0
+
                 speed_right, speed_left, time_out = calculate_movement_variable_time(self, self.base_rpm,self.winkel_x, move)
 
                 self.motor_msg[0] = speed_right    #rpm right motor
@@ -124,7 +126,7 @@ class MovementControl(Node):
                     motor_msg_sent.data = self.motor_msg
                     self.motor_pub.publish(motor_msg_sent)
                     self.get_logger().info("Data sent to Motor: {}".format(self.motor_msg))
-                self.old_time = add_seconds_to_time(old_time, time_out + 0.15)
+                self.old_time = add_seconds_to_time(old_time, time_out)
         # else:
         #     self.get_logger().info("Data not used old time: {} - new time {}".format(self.old_time, self.time1))
     
