@@ -30,6 +30,13 @@ class CameraOpencv(Node):
         try:
             self.vid0 = cv2.VideoCapture(0)
             self.vid0.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+            self.vid0.set(cv2.CAP_PROP_FPS, 10)
+
+            actual_frame_rate = self.vid0.get(cv2.CAP_PROP_FPS)
+            actual_width = self.vid0.get(cv2.CAP_PROP_FRAME_WIDTH)
+            actual_height = self.vid0.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            self.get_logger().info('frame rate: {} resolution: {} x {}'.format(actual_frame_rate, actual_width, actual_height))
+
         except:
             pass
 
