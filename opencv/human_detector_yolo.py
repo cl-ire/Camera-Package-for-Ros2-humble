@@ -75,8 +75,8 @@ class HumanDetector():
             x, y, w, h = self.selected_human
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-            x_custom, y_custom = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
-            # x_custom, y_custom = self.cv_to_custom_coordinates(x_cv=x + w // 2, y_cv=y + h // 2, frame_width=frame_height,frame_height=frame_height)
+            # x_custom, y_custom = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
+            x_custom, y_custom = self.cv_to_custom_coordinates(x_cv=x + w // 2, y_cv=y + h // 2, frame_width=frame_height,frame_height=frame_height)
             # percentage_of_frame_height = self.get_percentage_of_height(self.selected_human, frame_height)
             move_forward = self.move_robot(hight_of_person=h, frame_height=frame_height)
 
@@ -91,7 +91,7 @@ class HumanDetector():
             values.append(frame_height)
             values.append(move_forward)
             text = "Person: ({}|{}) Move: {}".format(x_custom, y_custom, move_forward)
-            cv2.putText(frame, text, (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+            cv2.putText(frame, text, (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 255, 255), 3)
         # Increment the frame counter
         self.frame_counter += 1
 
