@@ -68,9 +68,7 @@ class CameraOpencv(Node):
             Position = []
 
             # self.get_logger().info('Image shot at {}'.format(time1))
-            # ret, image = self.vid0.read()
-            # ret, image = self.vid0.read()
-            
+                        
             if self.vid0.last_frame is not None:
                 image = self.vid0.last_frame
 
@@ -83,6 +81,8 @@ class CameraOpencv(Node):
 
             # self.get_logger().info('Image processed at {}'.format(movement_control_util.get_current_time()))
             # self.get_logger().info('Image published with data {}'.format(Position))
+
+            self.get_logger().info('Image shot at: {} Image processed at: {}'.format(time1, movement_control_util.get_current_time()))
             self.publish_data(Position, time1, return_image)
 
         except Exception as e:

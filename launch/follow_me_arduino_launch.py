@@ -40,7 +40,7 @@ def generate_launch_description():
             executable='camera_streamer',
             name='camera_streamer',
             output='screen',
-             parameters=[
+            parameters=[
                 {'ip': "192.168.5.1"},
             ]
         ),
