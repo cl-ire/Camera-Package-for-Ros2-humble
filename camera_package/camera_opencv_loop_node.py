@@ -28,15 +28,19 @@ class CameraOpencv(Node):
         self.bridge = CvBridge()
 
         try:
-            # self.vid0 = cv2.VideoCapture(0)
-            self.vid0 = cv2.VideoCapture(0, cv2.CAP_V4L2)
-            self.vid0.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-            self.vid0.set(cv2.CAP_PROP_FPS, 10)
+            self.vid0 = cv2.VideoCapture(0)
+            # self.vid0 = cv2.VideoCapture(0, cv2.CAP_V4L2)
+            if self.vid0.set(cv2.CAP_PROP_BUFFERSIZE, 0):
+                self.get_logger().info('Buffer size set to 0.')
+            else:
+                self.get_logger().info('Buffer size not set.')
 
-            actual_frame_rate = self.vid0.get(cv2.CAP_PROP_FPS)
-            actual_width = self.vid0.get(cv2.CAP_PROP_FRAME_WIDTH)
-            actual_height = self.vid0.get(cv2.CAP_PROP_FRAME_HEIGHT)
-            self.get_logger().info('frame rate: {} resolution: {} x {}'.format(actual_frame_rate, actual_width, actual_height))
+            # self.vid0.set(cv2.CAP_PROP_FPS, 10)
+
+            # actual_frame_rate = self.vid0.get(cv2.CAP_PROP_FPS)
+            # actual_width = self.vid0.get(cv2.CAP_PROP_FRAME_WIDTH)
+            # actual_height = self.vid0.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            # self.get_logger().info('frame rate: {} resolution: {} x {}'.format(actual_frame_rate, actual_width, actual_height))
 
         except:
             pass
