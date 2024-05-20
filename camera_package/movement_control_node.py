@@ -20,7 +20,7 @@ class MovementControl(Node):
         self.declare_parameter('motor_settings_correction_factor', 1.0)
         self.declare_parameter('motor_settings_base_rpm', 100)        
         self.declare_parameter('enable_movement', False)
-        
+        self.declare_parameter('enable_servo', False)
 
         self.max_winkel_x = self.get_parameter('camera_max_winkel_x').value
         self.max_winkel_y = self.get_parameter('camera_max_winkel_y').value
@@ -35,6 +35,7 @@ class MovementControl(Node):
         # self.optimal_hight_percentage = determine_percentage_of_height(self)
 
         self.enable_movement = self.get_parameter('enable_movement').value
+        self.enable_servo = self.get_parameter('enable_servo').value
 
         # default time the vihical is moving       
         self.old_time = datetime.datetime.strptime("00:00:00.000000", "%H:%M:%S.%f").time()
@@ -94,7 +95,7 @@ class MovementControl(Node):
 
             self.servo_msg_hold, self.winkel_x, self.winkel_y = calculate_angle(self)
 
-            if self.enable_movement:
+            if self.enable_movement and self.enable_servo:
                 servo_msg_sent = Int32MultiArray()
                 servo_msg_sent.data = self.servo_msg_hold
                 self.servo_pub.publish(servo_msg_sent)

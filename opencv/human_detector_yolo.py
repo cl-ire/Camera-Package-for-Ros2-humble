@@ -93,6 +93,9 @@ class HumanDetector():
         # Increment the frame counter
         self.frame_counter += 1
 
+        text = "Person: ({}|{}) Move: {}".format(custom_center_of_person[0], custom_center_of_person[1], move_forward)
+        cv2.putText(frame, text, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+
         frame = self.draw_coordinate_system(frame)
         if self.show_frame == True:
             # Display the processed frame (for testing purposes)            
@@ -100,7 +103,6 @@ class HumanDetector():
         #self.selected_human = None
         self.detected_humans = []
         return values, frame
-
 
 
     def select_human(self, frame, outs):
@@ -132,7 +134,7 @@ class HumanDetector():
                 # Stay still
                 return 0
     
-
+    
     def draw_coordinate_system(self, frame):
 
         height, width, _ = frame.shape

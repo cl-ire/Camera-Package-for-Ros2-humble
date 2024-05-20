@@ -33,6 +33,7 @@ def generate_launch_description():
                 {'motor_settings_correction_factor': 1.0},
                 {'motor_settings_base_rpm': 100},
                 {'enable_movement': True},
+                {'enable_servo': False},
             ]
         ),
         Node(
