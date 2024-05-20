@@ -75,23 +75,23 @@ class HumanDetector():
             x, y, w, h = self.selected_human
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-            # custom_x, custom_y = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
-            custom_center_of_person = self.cv_to_custom_coordinates(x_cv=x + w // 2, y_cv=y + h // 2, frame_width=frame_height,frame_height=frame_height)
+            custom_x, custom_y = self.cv_to_custom_coordinates(x_cv=x, y_cv=y, frame_width=width, frame_height=frame_height)
+            # x_custom, y_custom = self.cv_to_custom_coordinates(x_cv=x + w // 2, y_cv=y + h // 2, frame_width=frame_height,frame_height=frame_height)
             # percentage_of_frame_height = self.get_percentage_of_height(self.selected_human, frame_height)
             move_forward = self.move_robot(hight_of_person=h, frame_height=frame_height)
 
             # custom_x center of person
-            values.append(custom_center_of_person[0])
+            values.append(x_custom)
             # custom_y center of person
-            values.append(custom_center_of_person[1])
+            values.append(y_custom)
             values.append(w)  # width of person
             values.append(h)  # height of person
             # values.append(percentage_of_frame_height)
             values.append(width)
             values.append(frame_height)
             values.append(move_forward)
-            text = "Person: ({}|{}) Move: {}".format(custom_center_of_person[0], custom_center_of_person[1], move_forward)
-            cv2.putText(frame, text, (20, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+            text = "Person: ({}|{}) Move: {}".format(x_custom, y_custom, move_forward)
+            cv2.putText(frame, text, (30, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
         # Increment the frame counter
         self.frame_counter += 1
 
