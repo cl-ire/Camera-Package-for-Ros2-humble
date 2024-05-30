@@ -13,6 +13,7 @@ def generate_launch_description():
             parameters=[
                 {'detector_type': "haarcascade"},
                 {'timer_period': 0.5},
+                {'optimal_hight_percentage': 75},
             ]
         ),
         Node(
@@ -28,9 +29,19 @@ def generate_launch_description():
                 {'motor_settings_radius': 25},
                 {'motor_settings_wheel_distance': 9},
                 {'motor_settings_wheel_radius': 2.3},
-                {'motor_settings_correction_factor': 1},
+                {'motor_settings_correction_factor': 1.0},
                 {'motor_settings_base_rpm': 100},
-                {'enable_movement': False},
+                {'enable_movement': True},
+                {'enable_servo': False},
+            ]
+        ),
+        Node(
+            package='camera_package',
+            executable='camera_streamer',
+            name='camera_streamer',
+            output='screen',
+            parameters=[
+                {'ip': "192.168.5.1"},
             ]
         ),
         Node(
@@ -38,12 +49,11 @@ def generate_launch_description():
             executable='joystick',
             name='joystick',
             output='screen',
-            emulate_tty=True,
         ),
         Node(
-            package='camera_package',
-            executable='camera_streamer',
-            name='camera_streamer',
+            package='ros2_for_waveshare_alphabot2',
+            executable='motion',
+            name='motion',
             output='screen',
         ),
 
