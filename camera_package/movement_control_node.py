@@ -152,8 +152,13 @@ class MovementControl(Node):
             servo_msg_sent.data = [0, 0]
             self.servo_pub.publish(servo_msg_sent)
             time.sleep(1)
-        # elif imput == "Right":
-        #     #
+        elif imput == "Right":
+            # togle servos
+            self.enable_servo = not self.enable_servo
+            if self.enable_servo:
+                self.get_logger().info("servos enabled")
+            else:
+                self.get_logger().info("servos diabled")
         # elif imput == "Left":
         #     #
         # elif imput == "Down":

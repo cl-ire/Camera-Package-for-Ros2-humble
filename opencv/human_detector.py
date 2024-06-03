@@ -1,8 +1,10 @@
 import cv2
 import os
 class HumanDetector():
-    def __init__(self, show_frame = False, save_image = False, path_to_image = "/home/ubuntu/image", xml_file = "haarcascade_frontalface_default.xml"):
+    def __init__(self, show_frame = False, save_image = False, path_to_image = "/home/ubuntu/image", xml_file = "haarcascade_frontalface_default.xml", optimal_hight_percentage = 15):
         # Initialize the HumanDetector class with necessary attributes
+        self.optimal_hight_percentage = optimal_hight_percentage
+        
         self.name = "HumanDetector"        
 
         self.bbox_person = None
@@ -32,16 +34,32 @@ class HumanDetector():
                 x_cv=self.bbox_person[0] + self.bbox_person[2] // 2, y_cv=self.bbox_person[1] + self.bbox_person[3] // 2
                 , frame_width=frame_width, frame_height=frame_height)
 
+            move_forward = self.move_robot(hight_of_person=self.bbox_person[3], frame_height=frame_height)
+            
             values.append(int(custom_center_of_person[0]))  # custom_x center of person
             values.append(int(custom_center_of_person[1]))  # custom_y center of person
             values.append(int(self.bbox_person[2]))         # width of person
             values.append(int(self.bbox_person[3]))         # height of person
             values.append(int(frame_width))                 # width of image
             values.append(int(frame_height))                # height of image
-            values.append(self.frame_counter)               # amount of images processed
+            values.append(move_forward)
 
         return values, image
 
+    
+    def move_robot(self, hight_of_person, frame_height):
+        self.optimal_hight_percentage 
+        if frame_height > 0:
+            percentage_of_height = (hight_of_person/frame_height*100)
+
+            if percentage_of_height < self.optimal_hight_percentage:
+                # Move forward
+                return 1
+            else:
+                # Stay still
+                return 0 
+    
+    
     def process_frame(self, frame):
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         humans = self.full_body_cascade.detectMultiScale(

@@ -13,7 +13,7 @@ def generate_launch_description():
             parameters=[
                 {'detector_type': "haarcascade"},
                 {'timer_period': 0.5},
-                {'optimal_hight_percentage': 75},
+                {'optimal_hight_percentage': 15},
             ]
         ),
         Node(

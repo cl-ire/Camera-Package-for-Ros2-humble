@@ -53,7 +53,7 @@ class CameraOpencv(Node):
             self.detector = human_detector_yolo.HumanDetector(path=detector_path, optimal_hight_percentage=optimal_hight_percentage)
             self.detector_active = True
         elif self.get_parameter('detector_type').value == "haarcascade":
-            self.detector = human_detector.HumanDetector()
+            self.detector = human_detector.HumanDetector(optimal_hight_percentage=optimal_hight_percentage)
             self.detector_active = True
         elif self.get_parameter('detector_type').value == "none":
             self.detector_active = False
