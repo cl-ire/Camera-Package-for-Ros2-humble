@@ -13,7 +13,7 @@ def generate_launch_description():
             arguments=['--ros-args', '--log-level', 'FATAL'],
             parameters=[
                 {'detector_type': "haarcascade"},
-                {'timer_period': 1.2},
+                {'timer_period': 2.0},
                 {'optimal_hight_percentage': 15},
             ]
         ),
