@@ -13,7 +13,7 @@ def generate_launch_description():
             arguments=['--ros-args', '--log-level', 'FATAL'],
             parameters=[
                 {'detector_type': "haarcascade"},
-                {'timer_period': 0.5},
+                {'timer_period': 1.2},
                 {'optimal_hight_percentage': 15},
             ]
         ),
@@ -58,6 +58,7 @@ def generate_launch_description():
             output='screen',
             parameters=[
                 {'max_rpm': "140"},
+                {'motion_duration_offset': "500"},
             ]
         ),
         Node(
