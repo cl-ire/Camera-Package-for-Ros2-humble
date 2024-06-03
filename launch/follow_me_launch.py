@@ -31,7 +31,7 @@ def generate_launch_description():
                 {'motor_settings_wheel_radius': 2.3},
                 {'motor_settings_correction_factor': 1.0},
                 {'motor_settings_base_rpm': 100},
-                {'enable_movement': True},
+                {'enable_movement': False},
                 {'enable_servo': False},
             ]
         ),

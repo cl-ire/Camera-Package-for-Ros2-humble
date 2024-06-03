@@ -33,6 +33,8 @@ class CameraOpencv(Node):
         self.declare_parameter('detector_path', "/home/ubuntu/ros2_ws/src/yolo_config/")
 
         self.declare_parameter('optimal_hight_percentage', 75)
+        
+        optimal_hight_percentage = self.get_parameter('optimal_hight_percentage').value
     
 
 
@@ -48,8 +50,7 @@ class CameraOpencv(Node):
             pass
 
         if self.get_parameter('detector_type').value == "yolo":
-            detector_path = self.get_parameter('detector_path').value
-            optimal_hight_percentage = self.get_parameter('optimal_hight_percentage').value
+            detector_path = self.get_parameter('detector_path').value            
             self.detector = human_detector_yolo.HumanDetector(path=detector_path, optimal_hight_percentage=optimal_hight_percentage)
             self.detector_active = True
         elif self.get_parameter('detector_type').value == "haarcascade":
