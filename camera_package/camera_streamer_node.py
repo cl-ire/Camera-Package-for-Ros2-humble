@@ -62,9 +62,9 @@ def main():
     # Run Flask app in a separate thread
     
     # Get the local IP address dynamically
-    local_ip = socket.gethostbyname(socket.gethostname())
+    # local_ip = socket.gethostbyname(socket.gethostname())
     print('--------------------------------------------')
-    print(f" access video feed on http://{local_ip}:5000")
+    print(f" access video feed on http://{image_streamer.ip}:5000")
     print('--------------------------------------------')
 
     thread = threading.Thread(target=app.run, kwargs={'host': image_streamer.ip, 'port': 5000})

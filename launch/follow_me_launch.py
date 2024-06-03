@@ -56,5 +56,11 @@ def generate_launch_description():
             name='motion',
             output='screen',
         ),
+        Node(
+            package='ros2_for_waveshare_alphabot2',
+            executable='pan_tilt',
+            name='pan_tilt',
+            output='screen',
+        ),
 
     ])
