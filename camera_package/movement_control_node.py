@@ -93,7 +93,7 @@ class MovementControl(Node):
         if use_data:           
             move = False
 
-            self.servo_msg_hold, self.winkel_x, self.winkel_y = calculate_angle(self)
+            self.servo_msg_hold, self.winkel_x, self.winkel_y = calculate_angle(self, servo_pan = False)
 
             if self.enable_movement and self.enable_servo:
                 servo_msg_sent = Int32MultiArray()
@@ -149,7 +149,7 @@ class MovementControl(Node):
             #center servo
             servo_msg_sent = Int32MultiArray()
             self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
-            servo_msg_sent.data = [0, 0]
+            servo_msg_sent.data = [15, 0]
             self.servo_pub.publish(servo_msg_sent)
             time.sleep(1)
         elif imput == "Right":
