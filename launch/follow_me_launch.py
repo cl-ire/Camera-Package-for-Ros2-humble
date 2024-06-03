@@ -10,6 +10,7 @@ def generate_launch_description():
             executable='camera_opencv_loop',
             name='camera_opencv_loop',
             output='screen',
+            arguments=['--ros-args', '--log-level', 'FATAL'],
             parameters=[
                 {'detector_type': "haarcascade"},
                 {'timer_period': 0.5},
