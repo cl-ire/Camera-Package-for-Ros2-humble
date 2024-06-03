@@ -41,7 +41,7 @@ def generate_launch_description():
             name='camera_streamer',
             output='screen',
             parameters=[
-                {'ip': "192.168.5.1"},
+                {'ip': "192.168.4.1"},
             ]
         ),
         Node(
