@@ -83,11 +83,11 @@ def calculate_angle(self, servo_pan = True):
     self.get_logger().info("Angle: [{}, {}]".format(self.winkel_x, self.winkel_y))
 
     if self.enable_servo:        
-        self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_x
+        self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_x
         if servo_pan:
-            self.servo_msg_hold[1] = self.servo_msg_hold[1] + self.winkel_y
+            self.servo_msg_hold[0] = self.servo_msg_hold[0] + self.winkel_y
         else:
-            self.servo_msg_hold[1] = 0
+            self.servo_msg_hold[0] = 0
     
     return self.servo_msg_hold, self.winkel_x, self.winkel_y
 

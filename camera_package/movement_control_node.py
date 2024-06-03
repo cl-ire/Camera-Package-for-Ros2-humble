@@ -149,7 +149,7 @@ class MovementControl(Node):
             #center servo
             servo_msg_sent = Int32MultiArray()
             self.get_logger().info("Data sent to Servo: {}".format(self.servo_msg_hold))
-            servo_msg_sent.data = [15, 0]
+            servo_msg_sent.data = [0, 20]
             self.servo_pub.publish(servo_msg_sent)
             time.sleep(1)
         elif imput == "Right":
