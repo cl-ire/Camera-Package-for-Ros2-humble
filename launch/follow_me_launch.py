@@ -57,8 +57,8 @@ def generate_launch_description():
             name='motion',
             output='screen',
             parameters=[
-                {'max_rpm': "140"},
-                {'motion_duration_offset': "500"},
+                {'max_rpm': 140},
+                {'motion_duration_offset': 500},
             ]
         ),
         Node(
