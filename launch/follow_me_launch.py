@@ -10,10 +10,11 @@ def generate_launch_description():
             executable='camera_opencv_loop',
             name='camera_opencv_loop',
             output='screen',
+            arguments=['--ros-args', '--log-level', 'FATAL'],
             parameters=[
                 {'detector_type': "haarcascade"},
-                {'timer_period': 0.5},
-                {'optimal_hight_percentage': 75},
+                {'timer_period': 2.0},
+                {'optimal_hight_percentage': 15},
             ]
         ),
         Node(
@@ -22,16 +23,16 @@ def generate_launch_description():
             name='movement_control',
             output='screen',
             parameters=[
-                {'camera_max_winkel_x': 85},
-                {'camera_max_winkel_y': 50},
+                {'camera_max_winkel_x': 35},
+                {'camera_max_winkel_y': 26},
                 {'distance_to_person': 200},
                 {'hight_of_person': 170},
                 {'motor_settings_radius': 25},
                 {'motor_settings_wheel_distance': 9},
                 {'motor_settings_wheel_radius': 2.3},
                 {'motor_settings_correction_factor': 1.0},
-                {'motor_settings_base_rpm': 100},
-                {'enable_movement': True},
+                {'motor_settings_base_rpm': 60},
+                {'enable_movement': False},
                 {'enable_servo': False},
             ]
         ),
@@ -41,7 +42,7 @@ def generate_launch_description():
             name='camera_streamer',
             output='screen',
             parameters=[
-                {'ip': "192.168.5.1"},
+                {'ip': "192.168.4.1"},
             ]
         ),
         Node(
@@ -54,6 +55,16 @@ def generate_launch_description():
             package='ros2_for_waveshare_alphabot2',
             executable='motion',
             name='motion',
+            output='screen',
+            parameters=[
+                {'max_rpm': 500},
+                {'motion_duration_offset': 0},
+            ]
+        ),
+        Node(
+            package='ros2_for_waveshare_alphabot2',
+            executable='pan_tilt',
+            name='pan_tilt',
             output='screen',
         ),
 
