@@ -4,6 +4,12 @@
 :source-highlighter: highlight.js
 :xrefstyle: basic
 
+image::robot.jpg[]
+
+== Documentation 
+
+find our documentation here: link:https://github.com/tBuddy00/Follow-Me-Roboter[Follow-Me-Roboter]
+
 == Introduction
 
 This guide provides instructions on how to set up a ROS 2 environment on a Raspberry Pi or Jetson Nano. It also includes instructions on how to install the necessary packages for the Follow-Me Robot project.
