@@ -36,7 +36,8 @@ setup(
             'web_control_center = camera_package.web_control_center_node:main',
             'camera_save_image = camera_package.camera_save_image_node:main', 
             'arduino_interface = camera_package.arduino_interface_node:main',
-            'movement_test = camera_package.movement_test_node:main',            
+            'movement_test = camera_package.movement_test_node:main',
+            'test_movement_control = camera_package.test_movement_control_node:main',         
         ],
     },
 )
